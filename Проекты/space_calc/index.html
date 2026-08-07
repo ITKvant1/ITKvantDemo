@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Космический Калькулятор</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Блокируем выделение текста и скролл для ощущения приложения */
+        body {
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        /* Анимация звездного фона */
+        .stars {
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: moveStars 10s linear infinite;
+        }
+
+        @keyframes moveStars {
+            from {background-position: 0 0;}
+            to {background-position: 0 500px;}
+        }
+
+        /* Эффект взрыва */
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-4px, 0, 0); }
+            20%, 80% { transform: translate3d(8px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+            40%, 60% { transform: translate3d(8px, 0, 0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-white h-screen w-screen relative stars">
+
+    <!-- UI Слой -->
+    <div id="ui-layer" class="absolute top-0 left-0 w-full p-4 z-20 flex justify-between items-start pointer-events-none">
+        <div class="flex flex-col">
+            <span class="text-xl text-cyan-400 uppercase tracking-widest">Счет</span>
+            <span id="score-display" class="text-3xl font-bold text-white drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]">0</span>
+        </div>
+        <div class="flex flex-col items-end">
+            <span class="text-xl text-purple-400 uppercase tracking-widest">Уровень</span>
+            <span id="level-display" class="text-xl font-bold text-white">1</span>
+        </div>
+    </div>
+
+    <!-- Пример (Математика) -->
+    <div id="math-container" class="absolute top-5 left-0 w-full text-center z-10 pointer-events-none">
+        <div class="inline-block bg-slate-800/80 backdrop-blur-sm border border-cyan-500/30 px-8 py-4 rounded-2xl shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+            <h2 id="question-text" class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+                2 + 2 = ?
+            </h2>
+        </div>
+    </div>
+
+    <!-- Игровое поле -->
+    <div id="game-area" class="absolute inset-0 z-0">
+        <!-- Проходы (Варианты ответов) будут генерироваться здесь JS-ом -->
+    </div>
+
+    <!-- Корабль игрока -->
+    <div id="player" class="absolute bottom-10 text-6xl transition-transform duration-75 ease-out will-change-transform z-30 filter drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]" style="left: 50%; transform: translateX(-50%);">
+        🚀
+    </div>
+
+    <!-- Экран Game Over / Старт -->
+    <div id="overlay" class="absolute inset-0 bg-slate-900/90 z-50 flex flex-col items-center justify-center text-center p-6">
+        <h1 class="text-5xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
+            КОСМО<br>МАТЕМАТИКА
+        </h1>
+        <p class="text-slate-300 mb-8 max-w-md">
+            Решай примеры в уме.<br>
+            Перетаскивай корабль под правильный ответ.<br>
+            Не врезайся в неправильные числа!
+        </p>
+        <button id="start-btn" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-4 px-12 rounded-full text-xl shadow-lg transform transition active:scale-95">
+            ПОЛЕТЕЛИ 🚀
+        </button>
+    </div>
+
+    <script>
+        // --- Конфигурация и Состояние ---
+        const state = {
+            isPlaying: false,
+            score: 0,
+            level: 1,
+            speed: 2, // Скорость падения блоков
+            spawnRate: 2000, // мс между спавном (не используется напрямую, т.к. спавн по событию)
+            lastTime: 0,
+            correctAnswer: 0,
+            blocks: [], // Массив падающих блоков
+            playerX: window.innerWidth / 2
+        };
+
+        // DOM Элементы
+        const els = {
+            player: document.getElementById('player'),
+            gameArea: document.getElementById('game-area'),
+            question: document.getElementById('question-text'),
+            score: document.getElementById('score-display'),
+            level: document.getElementById('level-display'),
+            overlay: document.getElementById('overlay'),
+            startBtn: document.getElementById('start-btn'),
+            body: document.body
+        };
+
+        // --- Управление (Touch & Mouse) ---
+        function handleInput(x) {
+            if (!state.isPlaying) return;
+            
+            // Ограничиваем движение границами экрана
+            const padding = 30; 
+            let newX = x;
+            if (newX < padding) newX = padding;
+            if (newX > window.innerWidth - padding) newX = window.innerWidth - padding;
+
+            state.playerX = newX;
+            els.player.style.left = `${newX}px`;
+        }
+
+        // Touch события
+        window.addEventListener('touchmove', (e) => {
+            e.preventDefault(); // Предотвращаем скролл
+            handleInput(e.touches[0].clientX);
+        }, { passive: false });
+
+        window.addEventListener('touchstart', (e) => {
+            handleInput(e.touches[0].clientX);
+        }, { passive: false });
+
+        // Mouse события (для тестов на ПК)
+        window.addEventListener('mousemove', (e) => {
+            if(e.buttons === 1 || state.isPlaying) { // Если кнопка нажата или игра идет
+                 handleInput(e.clientX);
+            }
+        });
+
+        // --- Логика Игры ---
+
+        function generateMath() {
+            const lvl = state.level;
+            let a, b, operator, answer;
+            const operators = ['+', '-'];
+            if (lvl > 2) operators.push('*');
+            if (lvl > 4) operators.push('/');
+
+            operator = operators[Math.floor(Math.random() * operators.length)];
+
+            switch (operator) {
+                case '+':
+                    a = Math.floor(Math.random() * (10 * lvl)) + 1;
+                    b = Math.floor(Math.random() * (10 * lvl)) + 1;
+                    answer = a + b;
+                    break;
+                case '-':
+                    a = Math.floor(Math.random() * (10 * lvl)) + 5;
+                    b = Math.floor(Math.random() * a); // Чтобы не было отрицательных
+                    answer = a - b;
+                    break;
+                case '*':
+                    a = Math.floor(Math.random() * (3 + lvl)) + 1;
+                    b = Math.floor(Math.random() * 9) + 1;
+                    answer = a * b;
+                    break;
+                case '/':
+                    b = Math.floor(Math.random() * 8) + 2;
+                    answer = Math.floor(Math.random() * 9) + 1;
+                    a = b * answer; // Гарантируем целое число
+                    break;
+            }
+
+            state.correctAnswer = answer;
+            els.question.innerText = `${a} ${operator.replace('*', '×').replace('/', '÷')} ${b} = ?`;
+            
+            spawnBlocks(answer);
+        }
+
+                function spawnBlocks(correctVal) {
+            // Очищаем старые блоки если есть
+            els.gameArea.innerHTML = '';
+            state.blocks = [];
+
+            const width = window.innerWidth;
+            const blockSize = 80; // w-20 в Tailwind = 5rem = 80px
+            const padding = 10;   // Отступ от краев экрана
+            
+            // 1. Определяем случайное количество блоков от 3 до 5
+            const totalBlocks = Math.floor(Math.random() * 3) + 3; 
+            
+            // 2. Генерируем неправильные ответы
+            const answers = [{ val: correctVal, isCorrect: true }];
+            
+            while (answers.length < totalBlocks) {
+                // Генерируем "умный" неправильный ответ (близкий к правильному)
+                let offset = Math.floor(Math.random() * 10) + 1;
+                if (Math.random() > 0.5) offset = -offset;
+                
+                let wrongVal = correctVal + offset;
+                if (wrongVal < 0) wrongVal = correctVal + Math.abs(offset); // Избегаем отрицательных
+                
+                // Проверяем уникальность, чтобы не было дубликатов
+                if (!answers.find(a => a.val === wrongVal)) {
+                    answers.push({ val: wrongVal, isCorrect: false });
+                }
+            }
+
+            // Перемешиваем массив ответов, чтобы правильный не был всегда первым при генерации
+            answers.sort(() => Math.random() - 0.5);
+
+            // 3. Расставляем блоки по экрану без наложений
+            const placedPositions = []; // Массив занятых X-координат
+
+            answers.forEach((ans) => {
+                const el = document.createElement('div');
+                
+                // Стилизация (оставляем вашу, но унифицируем цвета для сложности, 
+                // либо можно вернуть разные цвета, если хотите подсказку)
+                el.className = `absolute top-[-100px] w-20 h-20 flex items-center justify-center text-2xl font-bold rounded-xl border-2 shadow-lg backdrop-blur-md
+                    ${ans.isCorrect 
+                        ? 'bg-red-500/20 border-yellow-400 text-yellow-100 shadow-[0_0_15px_rgba(248,113,113,0.5)]' 
+                        : 'bg-red-500/20 border-yellow-400 text-yellow-100 shadow-[0_0_15px_rgba(248,113,113,0.5)]'
+                    }`;
+                
+                el.innerText = ans.val;
+                
+                // Алгоритм поиска свободного места
+                let x, attempts = 0, isValid = false;
+                const maxAttempts = 50; // Защита от бесконечного цикла
+
+                while (!isValid && attempts < maxAttempts) {
+                    // Случайная позиция с учетом отступов
+                    x = Math.floor(Math.random() * (width - blockSize - padding * 2)) + padding;
+                    
+                    isValid = true;
+                    // Проверяем расстояние до всех уже размещенных блоков
+                    for (let pos of placedPositions) {
+                        if (Math.abs(x - pos) < blockSize + 10) { // 10px запас
+                            isValid = false;
+                            break;
+                        }
+                    }
+                    attempts++;
+                }
+
+                // Если не нашли место за 50 попыток (экран переполнен), ставим куда попало
+                // Но при 3-5 блоках на мобильном это маловероятно
+                if (!isValid) x = Math.floor(Math.random() * (width - blockSize));
+
+                placedPositions.push(x);
+                el.style.left = `${x}px`;
+                
+                els.gameArea.appendChild(el);
+
+                state.blocks.push({
+                    el: el,
+                    y: -120,
+                    isCorrect: ans.isCorrect,
+                    hit: false
+                });
+            });
+        }
+
+        function gameOver() {
+            state.isPlaying = false;
+            els.body.classList.add('shake');
+            setTimeout(() => els.body.classList.remove('shake'), 500);
+            
+            document.querySelector('#overlay h1').innerText = "GAME OVER";
+            document.querySelector('#overlay p').innerHTML = `Твой счет: <span class="text-3xl font-bold text-white">${state.score}</span>`;
+            els.startBtn.innerText = "ПОПРОБОВАТЬ СНОВА";
+            els.overlay.classList.remove('hidden');
+        }
+
+        function nextLevelCheck() {
+            // Каждые 5 очков повышаем уровень
+            if (state.score > 0 && state.score % 5 === 0) {
+                state.level++;
+                state.speed += 0.3;
+                els.level.innerText = state.level;
+                // Визуальный эффект повышения уровня
+                els.level.classList.add('text-yellow-400', 'scale-150');
+                setTimeout(() => els.level.classList.remove('text-yellow-400', 'scale-150'), 500);
+            }
+        }
+
+        function update(time) {
+            if (!state.isPlaying) return;
+
+            const deltaTime = time - state.lastTime;
+            state.lastTime = time;
+
+            // Двигаем блоки вниз
+            let allPassed = true;
+            const playerRect = els.player.getBoundingClientRect();
+            const playerTop = playerRect.top;
+
+            state.blocks.forEach(block => {
+                if (block.hit) return;
+
+                block.y += state.speed;
+                block.el.style.top = `${block.y}px`;
+
+                const blockRect = block.el.getBoundingClientRect();
+
+                // Проверка столкновения
+                // Если блок достиг уровня игрока
+                if (blockRect.bottom >= playerTop && blockRect.top <= playerRect.bottom) {
+                    // Проверка по горизонтали (простая проверка перекрытия)
+                    if (blockRect.right > playerRect.left + 20 && blockRect.left < playerRect.right - 20) {
+                        
+                        block.hit = true;
+                        
+                        if (block.isCorrect) {
+                            // Правильный ответ
+                            state.score++;
+                            els.score.innerText = state.score;
+                            nextLevelCheck();
+                            // Убираем все блоки и генерируем новые
+                            setTimeout(generateMath, 200); 
+                        } else {
+                            // Неправильный ответ
+                            gameOver();
+                        }
+                    }
+                }
+
+                // Если блок улетел вниз и не был выбран
+                if (block.y < window.innerHeight) {
+                    allPassed = false;
+                }
+            });
+
+            // Если все блоки улетели, а правильный не выбрали (промахнулся)
+            // Но в нашей логике блоки бесконечны пока не попадешь. 
+            // Однако, если правильный блок улетел за экран - это проигрыш?
+            // Давайте сделаем так: если правильный блок улетел за низ экрана -> Game Over (пропустил ответ)
+            const correctBlock = state.blocks.find(b => b.isCorrect);
+            if (correctBlock && correctBlock.y > window.innerHeight && !correctBlock.hit) {
+                gameOver();
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        function startGame() {
+            state.score = 0;
+            state.level = 1;
+            state.speed = 2;
+            state.isPlaying = true;
+            state.lastTime = performance.now();
+            
+            els.score.innerText = '0';
+            els.level.innerText = '1';
+            els.overlay.classList.add('hidden');
+            
+            // Сброс позиции игрока
+            state.playerX = window.innerWidth / 2;
+            els.player.style.left = '50%';
+
+            generateMath();
+            requestAnimationFrame(update);
+        }
+
+        // Инициализация
+        els.startBtn.addEventListener('click', startGame);
+
+    </script>
+</body>
+</html>
