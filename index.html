@@ -405,152 +405,161 @@ tailwind.config = {
 </section>
 
 <!-- ═══════════ 03 · ВИТРИНА ПРОЕКТОВ ═══════════ -->
-<section id="projects" class="scroll-mt-24 py-24 sm:py-28 border-t border-white/5">
+<section id="projects" class="scroll-mt-24 py-20 sm:py-24 border-t border-white/5">
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
-    <div class="rv flex flex-wrap items-end justify-between gap-6 mb-12">
+    
+    <!-- Заголовок секции -->
+    <div class="rv flex flex-wrap items-end justify-between gap-6 mb-8">
       <div>
         <p class="font-mono text-xs tracking-[.3em] text-lime-300">03 / ВИТРИНА</p>
-        <h2 class="font-display font-700 text-white text-3xl sm:text-4xl mt-4">Проекты наших учеников</h2>
-      </div>
-      <p class="font-mono text-xs text-slate-500">// 4 слота готовы к наполнению</p>
-    </div>
-
-    <div class="rv grid lg:grid-cols-[300px_1fr] gap-8 items-start">
-      <!-- вкладки -->
-      <div class="flex lg:flex-col gap-3 overflow-x-auto pb-2 lg:pb-0 lg:sticky lg:top-24" id="ptabs">
-        <button data-panel="p1" class="ptab shrink-0 lg:w-full text-left border border-white/10 rounded-lg px-5 py-4 bg-panel hover:border-white/30 transition-all group is-on">
-          <span class="flex items-center justify-between">
-            <span class="font-mono text-xs text-slate-500 group-hover:text-lime-300 transition-colors">01</span>
-            <span class="pdot w-2 h-2 rounded-full bg-slate-600" title="слот пуст"></span>
-          </span>
-          <span class="block font-display font-600 text-white mt-2">Scratch-проект</span>
-          <span class="block text-xs text-slate-500 mt-1">анимации и первые игры</span>
-        </button>
-        <button data-panel="p2" class="ptab shrink-0 lg:w-full text-left border border-white/10 rounded-lg px-5 py-4 bg-panel hover:border-white/30 transition-all group">
-          <span class="flex items-center justify-between">
-            <span class="font-mono text-xs text-slate-500 group-hover:text-lime-300 transition-colors">02</span>
-            <span class="pdot w-2 h-2 rounded-full bg-slate-600" title="слот пуст"></span>
-          </span>
-          <span class="block font-display font-600 text-white mt-2">Python-проект</span>
-          <span class="block text-xs text-slate-500 mt-1">скрипты, данные, расчёты</span>
-        </button>
-        <button data-panel="p3" class="ptab shrink-0 lg:w-full text-left border border-white/10 rounded-lg px-5 py-4 bg-panel hover:border-white/30 transition-all group">
-          <span class="flex items-center justify-between">
-            <span class="font-mono text-xs text-slate-500 group-hover:text-lime-300 transition-colors">03</span>
-            <span class="pdot w-2 h-2 rounded-full bg-slate-600" title="слот пуст"></span>
-          </span>
-          <span class="block font-display font-600 text-white mt-2">Игра на Godot</span>
-          <span class="block text-xs text-slate-500 mt-1">игровые миры и механики</span>
-        </button>
-        <button data-panel="p4" class="ptab shrink-0 lg:w-full text-left border border-white/10 rounded-lg px-5 py-4 bg-panel hover:border-white/30 transition-all group">
-          <span class="flex items-center justify-between">
-            <span class="font-mono text-xs text-slate-500 group-hover:text-lime-300 transition-colors">04</span>
-            <span class="pdot w-2 h-2 rounded-full bg-slate-600" title="слот пуст"></span>
-          </span>
-          <span class="block font-display font-600 text-white mt-2">Командный проект</span>
-          <span class="block text-xs text-slate-500 mt-1">большой продукт второго года</span>
-        </button>
-      </div>
-
-      <!-- панели -->
-      <div class="min-h-[420px]">
-
-        <!-- ═══ SLOT-1 : SCRATCH ═══ -->
-        <div id="p1" class="ppanel grid md:grid-cols-5 gap-6">
-          <div class="md:col-span-2 corner relative border border-dashed border-white/20 rounded-lg p-6">
-            <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
-            <p class="font-mono text-[10px] tracking-[.25em] text-cyan-300">// ОПИСАНИЕ ПРОЕКТА</p>
-            <h3 class="font-display font-600 text-white text-lg mt-3">Название проекта №1</h3>
-            <p class="text-sm text-slate-500 mt-3 leading-relaxed">Здесь появится текст: идея, задача, стек инструментов, роль ученика и результат работы.</p>
-            <div class="mt-5 pt-4 border-t border-white/10 font-mono text-[11px] text-slate-600 space-y-1.5">
-              <p>Автор → ______________</p>
-              <p>Возраст → ______ Модуль → Scratch</p>
-            </div>
-          </div>
-          <div class="md:col-span-3 corner relative border border-dashed border-white/20 rounded-lg aspect-[16/10] grid place-items-center bg-panel/40">
-            <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
-            <div class="text-center px-6">
-              <p class="font-display font-800 text-3xl text-white/15">//</p>
-              <p class="font-display font-600 text-slate-400 mt-2">Место для проекта</p>
-              <p class="font-mono text-[10px] tracking-[.2em] text-slate-600 mt-2">СКРИНШОТ · ВИДЕО · ДЕМО · ССЫЛКА</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ SLOT-2 : PYTHON ═══ -->
-        <div id="p2" class="ppanel hidden grid md:grid-cols-5 gap-6">
-          <div class="md:col-span-2 corner relative border border-dashed border-white/20 rounded-lg p-6">
-            <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
-            <p class="font-mono text-[10px] tracking-[.25em] text-lime-300">// ОПИСАНИЕ ПРОЕКТА</p>
-            <h3 class="font-display font-600 text-white text-lg mt-3">Название проекта №2</h3>
-            <p class="text-sm text-slate-500 mt-3 leading-relaxed">Здесь появится текст: идея, задача, стек инструментов, роль ученика и результат работы.</p>
-            <div class="mt-5 pt-4 border-t border-white/10 font-mono text-[11px] text-slate-600 space-y-1.5">
-              <p>Автор → ______________</p>
-              <p>Возраст → ______ Модуль → Python</p>
-            </div>
-          </div>
-          <div class="md:col-span-3 corner relative border border-dashed border-white/20 rounded-lg aspect-[16/10] grid place-items-center bg-panel/40">
-            <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
-            <div class="text-center px-6">
-              <p class="font-display font-800 text-3xl text-white/15">//</p>
-              <p class="font-display font-600 text-slate-400 mt-2">Место для проекта</p>
-              <p class="font-mono text-[10px] tracking-[.2em] text-slate-600 mt-2">СКРИНШОТ · ВИДЕО · ДЕМО · ССЫЛКА</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ SLOT-3 : GODOT ═══ -->
-        <div id="p3" class="ppanel hidden grid md:grid-cols-5 gap-6">
-          <div class="md:col-span-2 corner relative border border-dashed border-white/20 rounded-lg p-6">
-            <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
-            <p class="font-mono text-[10px] tracking-[.25em] text-violet-300">// ОПИСАНИЕ ПРОЕКТА</p>
-            <h3 class="font-display font-600 text-white text-lg mt-3">Название проекта №3</h3>
-            <p class="text-sm text-slate-500 mt-3 leading-relaxed">Здесь появится текст: идея, задача, стек инструментов, роль ученика и результат работы.</p>
-            <div class="mt-5 pt-4 border-t border-white/10 font-mono text-[11px] text-slate-600 space-y-1.5">
-              <p>Автор → ______________</p>
-              <p>Возраст → ______ Модуль → Godot</p>
-            </div>
-          </div>
-          <div class="md:col-span-3 corner relative border border-dashed border-white/20 rounded-lg aspect-[16/10] grid place-items-center bg-panel/40">
-            <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
-            <div class="text-center px-6">
-              <p class="font-display font-800 text-3xl text-white/15">//</p>
-              <p class="font-display font-600 text-slate-400 mt-2">Место для проекта</p>
-              <p class="font-mono text-[10px] tracking-[.2em] text-slate-600 mt-2">СКРИНШОТ · ВИДЕО · ДЕМО · ССЫЛКА</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ SLOT-4 : КОМАНДНЫЙ ═══ -->
-        <div id="p4" class="ppanel hidden grid md:grid-cols-5 gap-6">
-          <div class="md:col-span-2 corner relative border border-dashed border-white/20 rounded-lg p-6">
-            <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
-            <p class="font-mono text-[10px] tracking-[.25em] text-amber-300">// ОПИСАНИЕ ПРОЕКТА</p>
-            <h3 class="font-display font-600 text-white text-lg mt-3">Название проекта №4</h3>
-            <p class="text-sm text-slate-500 mt-3 leading-relaxed">Здесь появится текст: идея, команда, роли участников, стек и результат большого проекта второго года.</p>
-            <div class="mt-5 pt-4 border-t border-white/10 font-mono text-[11px] text-slate-600 space-y-1.5">
-              <p>Команда → ______________</p>
-              <p>Год обучения → 2 · Формат → команда</p>
-            </div>
-          </div>
-          <div class="md:col-span-3 corner relative border border-dashed border-white/20 rounded-lg aspect-[16/10] grid place-items-center bg-panel/40">
-            <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
-            <div class="text-center px-6">
-              <p class="font-display font-800 text-3xl text-white/15">//</p>
-              <p class="font-display font-600 text-slate-400 mt-2">Место для проекта</p>
-              <p class="font-mono text-[10px] tracking-[.2em] text-slate-600 mt-2">СКРИНШОТ · ВИДЕО · ДЕМО · ССЫЛКА</p>
-            </div>
-          </div>
-        </div>
+        <h2 class="font-display font-700 text-white text-3xl sm:text-4xl mt-3">Проекты учеников</h2>
       </div>
     </div>
 
-    <!-- <div class="rv mt-10 border border-white/10 rounded-lg bg-panel/50 px-6 py-4 font-mono text-[11px] text-slate-500 leading-relaxed">
-      <span class="text-lime-300">/* как наполнить */</span> найдите в коде блоки <span class="text-slate-300">SLOT-1 … SLOT-4</span> и замените содержимое на свои проекты:
-      заголовок, описание, автора и медиа. Витрину можно обновлять после каждого проекта.
-    </div> -->
+    <!-- Вкладки (Компактные, 4 в ряд) -->
+    <div class="rv mb-8">
+      <div class="grid grid-cols-4 gap-2 sm:gap-4" id="ptabs">
+        
+        <button data-panel="p1" class="ptab group relative flex flex-col items-start justify-center w-full border border-white/10 rounded-md px-3 py-2.5 sm:px-5 sm:py-3 bg-panel hover:border-white/20 transition-all is-on">
+          <span class="flex w-full items-center justify-between mb-1">
+            <span class="font-mono text-[10px] text-slate-500 group-hover:text-lime-300 transition-colors">01</span>
+            <span class="pdot w-1.5 h-1.5 rounded-full bg-slate-700 group-[.is-on]:bg-lime-400 transition-colors"></span>
+          </span>
+          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">WEB</span>
+          <!-- Индикатор активности -->
+          <span class="absolute bottom-0 left-2 right-2 h-[2px] bg-lime-400 scale-x-0 group-[.is-on]:scale-x-100 transition-transform duration-300"></span>
+        </button>
+
+        <button data-panel="p2" class="ptab group relative flex flex-col items-start justify-center w-full border border-white/10 rounded-md px-3 py-2.5 sm:px-5 sm:py-3 bg-panel hover:border-white/20 transition-all">
+          <span class="flex w-full items-center justify-between mb-1">
+            <span class="font-mono text-[10px] text-slate-500 group-hover:text-lime-300 transition-colors">02</span>
+            <span class="pdot w-1.5 h-1.5 rounded-full bg-slate-700 group-[.is-on]:bg-lime-400 transition-colors"></span>
+          </span>
+          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">Python</span>
+          <span class="absolute bottom-0 left-2 right-2 h-[2px] bg-lime-400 scale-x-0 group-[.is-on]:scale-x-100 transition-transform duration-300"></span>
+        </button>
+
+        <button data-panel="p3" class="ptab group relative flex flex-col items-start justify-center w-full border border-white/10 rounded-md px-3 py-2.5 sm:px-5 sm:py-3 bg-panel hover:border-white/20 transition-all">
+          <span class="flex w-full items-center justify-between mb-1">
+            <span class="font-mono text-[10px] text-slate-500 group-hover:text-lime-300 transition-colors">03</span>
+            <span class="pdot w-1.5 h-1.5 rounded-full bg-slate-700 group-[.is-on]:bg-lime-400 transition-colors"></span>
+          </span>
+          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">Godot</span>
+          <span class="absolute bottom-0 left-2 right-2 h-[2px] bg-lime-400 scale-x-0 group-[.is-on]:scale-x-100 transition-transform duration-300"></span>
+        </button>
+
+        <button data-panel="p4" class="ptab group relative flex flex-col items-start justify-center w-full border border-white/10 rounded-md px-3 py-2.5 sm:px-5 sm:py-3 bg-panel hover:border-white/20 transition-all">
+          <span class="flex w-full items-center justify-between mb-1">
+            <span class="font-mono text-[10px] text-slate-500 group-hover:text-lime-300 transition-colors">04</span>
+            <span class="pdot w-1.5 h-1.5 rounded-full bg-slate-700 group-[.is-on]:bg-lime-400 transition-colors"></span>
+          </span>
+          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">Команда</span>
+          <span class="absolute bottom-0 left-2 right-2 h-[2px] bg-lime-400 scale-x-0 group-[.is-on]:scale-x-100 transition-transform duration-300"></span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Контентная область -->
+    <div class="rv min-h-[400px]">
+
+      <!-- ═══ SLOT-1 : SCRATCH ═══ -->
+      <div id="p1" class="ppanel flex flex-col lg:flex-row gap-6 lg:gap-10">
+        <!-- Описание (Узкое слева) -->
+        <div class="lg:w-72 shrink-0 corner relative border border-dashed border-white/20 rounded-lg p-5 h-fit">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          <p class="font-mono text-[10px] tracking-[.25em] text-cyan-300">// ОПИСАНИЕ</p>
+          <h3 class="font-display font-600 text-white text-lg mt-2 leading-tight">Название проекта №1</h3>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed">Краткое описание идеи, задачи и результата работы ученика.</p>
+          
+          <div class="mt-5 pt-3 border-t border-white/10 font-mono text-[11px] text-slate-500 space-y-4">
+            <p class="flex justify-between"><span>Автор → Имя</span></p>
+            <p class="flex justify-between"><span>Модуль → WEB</span></p>
+          </div>
+        </div>
+
+        <!-- Проект (Широкое справа) -->
+        <div class="flex-1 corner relative border border-dashed border-white/20 rounded-lg min-h-[300px] lg:min-h-[420px] grid place-items-center bg-panel/40 overflow-hidden">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          <div class="text-center px-6">
+              <iframe src="./Проекты/physics/index.html" class="w-full h-full absolute inset-0 border-0" title="Физический проект"
+                style="
+                    width: 200%;
+                    height: 200%;
+                    transform: scale(0.50);
+                    transform-origin: top left;
+                  " loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SLOT-2 : PYTHON ═══ -->
+      <div id="p2" class="ppanel hidden flex flex-col lg:flex-row gap-6 lg:gap-10">
+        <div class="lg:w-72 shrink-0 corner relative border border-dashed border-white/20 rounded-lg p-5 h-fit">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          <p class="font-mono text-[10px] tracking-[.25em] text-lime-300">// ОПИСАНИЕ</p>
+          <h3 class="font-display font-600 text-white text-lg mt-2 leading-tight">Название проекта №2</h3>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed">Скрипт, бот или анализ данных. Описание функционала.</p>
+          <div class="mt-5 pt-3 border-t border-white/10 font-mono text-[11px] text-slate-500 space-y-4">
+            <p class="flex justify-between"><span>Автор → Имя</span></p>
+            <p class="flex justify-between"><span>Модуль → PYTHON</span></p>
+          </div>
+        </div>
+        <div class="flex-1 corner relative border border-dashed border-white/20 rounded-lg min-h-[300px] lg:min-h-[420px] grid place-items-center bg-panel/40">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+           <div class="text-center px-6">
+            <p class="font-display font-800 text-3xl text-white/10 mb-2">CODE</p>
+            <p class="font-display font-600 text-slate-400">Место для медиа</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SLOT-3 : GODOT ═══ -->
+      <div id="p3" class="ppanel hidden flex flex-col lg:flex-row gap-6 lg:gap-10">
+        <div class="lg:w-72 shrink-0 corner relative border border-dashed border-white/20 rounded-lg p-5 h-fit">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          <p class="font-mono text-[10px] tracking-[.25em] text-violet-300">// ОПИСАНИЕ</p>
+          <h3 class="font-display font-600 text-white text-lg mt-2 leading-tight">Название проекта №3</h3>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed">Игровой проект. Жанр, механики и особенности реализации.</p>
+          <div class="mt-5 pt-3 border-t border-white/10 font-mono text-[11px] text-slate-500 space-y-4">
+            <p class="flex justify-between"><span>Автор → Имя</span></p>
+            <p class="flex justify-between"><span>Модуль → GODOT</span></p>
+          </div>
+        </div>
+        <div class="flex-1 corner relative border border-dashed border-white/20 rounded-lg min-h-[300px] lg:min-h-[420px] grid place-items-center bg-panel/40">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+           <div class="text-center px-6">
+            <p class="font-display font-800 text-3xl text-white/10 mb-2">GAME</p>
+            <p class="font-display font-600 text-slate-400">Место для медиа</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SLOT-4 : КОМАНДНЫЙ ═══ -->
+      <div id="p4" class="ppanel hidden flex flex-col lg:flex-row gap-6 lg:gap-10">
+        <div class="lg:w-72 shrink-0 corner relative border border-dashed border-white/20 rounded-lg p-5 h-fit">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          <p class="font-mono text-[10px] tracking-[.25em] text-amber-300">// ОПИСАНИЕ</p>
+          <h3 class="font-display font-600 text-white text-lg mt-2 leading-tight">Финальный проект</h3>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed">Большая командная работа. Роли участников и общий результат.</p>
+          <div class="mt-5 pt-3 border-t border-white/10 font-mono text-[11px] text-slate-500 space-y-4">
+            <p class="flex justify-between"><span>Автор → 3 чел.</span></p>
+            <p class="flex justify-between"><span>Год → 2-ой год</span></p>
+          </div>
+        </div>
+        <div class="flex-1 corner relative border border-dashed border-white/20 rounded-lg min-h-[300px] lg:min-h-[420px] grid place-items-center bg-panel/40">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+           <div class="text-center px-6">
+            <p class="font-display font-800 text-3xl text-white/10 mb-2">TEAM</p>
+            <p class="font-display font-600 text-slate-400">Место для медиа</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
+
 
 <!-- ═══════════ 04 · СВЯЗЬ СО ШКОЛОЙ ═══════════ -->
 <section id="school" class="scroll-mt-24 py-24 sm:py-28 border-t border-white/5 bg-deep/60">
@@ -1097,21 +1106,46 @@ const $$ = s => [...document.querySelectorAll(s)];
 
 /* ---------- ТАБЫ ПРОЕКТОВ ---------- */
 (function(){
-  const tabs=$$('.ptab'), panels=$$('.ppanel');
-  function style(t){
-    tabs.forEach(x=>{ x.classList.toggle('is-on',x===t); x.classList.toggle('border-lime-300/60',x===t); x.classList.toggle('bg-white/5',x===t); });
-  }
-  style(tabs[0]);
-  tabs.forEach(t=>t.addEventListener('click',()=>{
-    style(t);
-    panels.forEach(p=>{
-      const on = p.id===t.dataset.panel;
-      p.classList.toggle('hidden',!on);
-      if(on){ p.style.animation='none'; void p.offsetWidth; p.style.animation='cardIn .45s cubic-bezier(.2,.7,.2,1)'; }
+  const tabs = document.querySelectorAll('.ptab');
+  const panels = document.querySelectorAll('.ppanel');
+  
+  function activateTab(targetTab) {
+    // Стилизация вкладок
+    tabs.forEach(t => {
+      const isActive = t === targetTab;
+      t.classList.toggle('is-on', isActive);
+      
+      if(isActive) {
+         t.classList.add('border-lime-300/40', 'bg-white/5');
+         t.classList.remove('border-white/10');
+      } else {
+         t.classList.remove('border-lime-300/40', 'bg-white/5');
+         t.classList.add('border-white/10');
+      }
     });
-  }));
-})();
 
+    // Переключение панелей
+    panels.forEach(p => {
+      const isTarget = p.id === targetTab.dataset.panel;
+      if (isTarget) {
+        p.classList.remove('hidden');
+        p.style.animation = 'none';
+        p.offsetHeight; /* trigger reflow */
+        p.style.animation = 'cardIn .35s ease-out forwards';
+      } else {
+        p.classList.add('hidden');
+      }
+    });
+  }
+
+  // Инициализация
+  if(tabs.length > 0) activateTab(tabs[0]);
+
+  // Клики
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => activateTab(tab));
+  });
+})();
 /* ---------- SCRAMBLE-ЗАГОЛОВОК ---------- */
 (function(){
   const el=$('#scr'); if(!el) return;
