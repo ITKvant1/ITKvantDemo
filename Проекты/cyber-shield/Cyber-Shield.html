@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#060b1a">
+<title>КИБЕР-ЩИТ — тренажёр НТО · Кибертех</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Rubik:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    fontFamily: {
+      disp: ['"Russo One"','sans-serif'],
+      body: ['Rubik','sans-serif'],
+      mono: ['"JetBrains Mono"','monospace'],
+    },
+    colors: { ink:'#060b1a', panel:'#0b132b', line:'#1e2c52', neo:'#22d3ee', sun:'#fbbf24', acid:'#a3e635', rosey:'#f472b6', danger:'#fb7185' }
+  }}
+}
+</script>
+<style>
+  html,body{height:100%;overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+  #app{height:100vh;height:100dvh}
+  button{outline:none;touch-action:manipulation}
+  button:focus-visible{outline:2px solid #22d3ee;outline-offset:2px}
+
+  /* ===== фон: слои ===== */
+  #bgBase{position:fixed;inset:0;z-index:0;background:
+    radial-gradient(1000px 620px at 12% -10%, rgba(34,211,238,.16), transparent 60%),
+    radial-gradient(900px 520px at 108% 12%, rgba(244,114,182,.10), transparent 60%),
+    radial-gradient(760px 520px at 82% 112%, rgba(163,230,53,.09), transparent 60%),
+    linear-gradient(180deg,#081226 0%,#060b1a 55%,#04060f 100%)}
+  #glyphs{position:fixed;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+  .glyph{position:absolute;bottom:-30px;font-family:'JetBrains Mono';pointer-events:none;animation:floatUp linear forwards}
+  @keyframes floatUp{0%{transform:translateY(0);opacity:0}8%{opacity:var(--o)}85%{opacity:var(--o)}100%{transform:translateY(-108vh);opacity:0}}
+  #gridfloor{position:fixed;left:-40%;right:-40%;bottom:-6%;height:44%;z-index:1;pointer-events:none;
+    background-image:linear-gradient(rgba(56,189,248,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.16) 1px,transparent 1px);
+    background-size:46px 46px;transform:perspective(620px) rotateX(63deg);transform-origin:top;
+    -webkit-mask-image:linear-gradient(to top,rgba(0,0,0,.95) 30%,transparent);mask-image:linear-gradient(to top,rgba(0,0,0,.95) 30%,transparent);
+    animation:gridScroll 1.5s linear infinite}
+  @keyframes gridScroll{to{background-position-y:46px}}
+  #horizon{position:fixed;left:0;right:0;bottom:38.5%;height:2px;z-index:1;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(34,211,238,.55),rgba(244,114,182,.35),transparent);filter:blur(1px)}
+  #scanlines{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.5;background:repeating-linear-gradient(0deg,rgba(255,255,255,.028) 0 1px,transparent 1px 3px)}
+  #vignette{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.5))}
+  #slowTint{position:fixed;inset:0;z-index:12;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(ellipse at 50% 30%,rgba(34,211,238,.13),rgba(34,211,238,.04));box-shadow:inset 0 0 0 2px rgba(34,211,238,.35)}
+  #hurtFlash{position:fixed;inset:0;z-index:35;pointer-events:none;opacity:0;transition:opacity .45s;background:radial-gradient(ellipse at center,transparent 38%,rgba(244,63,94,.5))}
+
+  /* ===== панели и кнопки ===== */
+  .panel{background:rgba(11,19,43,.85);border:1px solid #1e2c52}
+  .corner{position:relative}
+  .corner::before,.corner::after{content:'';position:absolute;width:14px;height:14px;border-color:#22d3ee;border-style:solid;opacity:.9}
+  .corner::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+  .corner::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+  .btn{font-family:'Russo One';letter-spacing:.08em;clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);transition:transform .12s,filter .15s,box-shadow .2s;cursor:pointer}
+  .btn:active{transform:scale(.95)}
+  .btn-acid{background:#a3e635;color:#0a1020;box-shadow:0 0 26px rgba(163,230,53,.35)}
+  .btn-acid:hover{filter:brightness(1.12);box-shadow:0 0 36px rgba(163,230,53,.55)}
+  .btn-neo{background:#22d3ee;color:#0a1020;box-shadow:0 0 26px rgba(34,211,238,.3)}
+  .btn-neo:hover{filter:brightness(1.12)}
+  .btn-ghost{clip-path:none;border:1px solid #2b3c6e;color:#cbd5e1;background:rgba(11,19,43,.6);border-radius:8px;transition:border-color .15s,color .15s,transform .12s}
+  .btn-ghost:hover{border-color:#22d3ee;color:#fff}
+  .btn-ghost:active{transform:scale(.95)}
+  .icon-btn{width:42px;height:42px;display:grid;place-items:center;border:1px solid #2b3c6e;border-radius:9px;background:rgba(11,19,43,.7);font-size:17px;transition:border-color .15s,transform .12s}
+  .icon-btn:hover{border-color:#22d3ee}
+  .icon-btn:active{transform:scale(.9)}
+  .chip{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.15em;color:#94a3b8;border:1px solid #1e2c52;padding:3px 8px;border-radius:4px;background:rgba(6,11,26,.6)}
+
+  /* ===== глитч-заголовок ===== */
+  .glitch{position:relative;text-shadow:0 0 24px rgba(34,211,238,.35)}
+  .glitch::before,.glitch::after{content:attr(data-text);position:absolute;inset:0;overflow:hidden}
+  .glitch::before{color:#22d3ee;z-index:-1;animation:gl1 3.1s infinite steps(1)}
+  .glitch::after{color:#f472b6;z-index:-2;animation:gl2 2.7s infinite steps(1)}
+  @keyframes gl1{0%,91%{transform:none;opacity:.7}92%{transform:translate(-4px,2px)}95%{transform:translate(3px,-1px)}96%,100%{transform:none}}
+  @keyframes gl2{0%,88%{transform:none;opacity:.6}89%{transform:translate(4px,-2px)}93%{transform:translate(-3px,2px)}94%,100%{transform:none}}
+
+  /* ===== бегущая строка ===== */
+  .ticker{display:inline-flex;white-space:nowrap;animation:tick 26s linear infinite}
+  @keyframes tick{to{transform:translateX(-50%)}}
+
+  /* ===== капсулы ответов ===== */
+  .cap{position:absolute;top:0;left:0;display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;padding:8px 10px;border:2px solid;border-radius:10px;background:rgba(10,16,34,.92);will-change:transform;transition:opacity .35s,filter .25s;cursor:pointer}
+  .cap-key{font-family:'Russo One';font-size:11px;width:22px;height:22px;display:grid;place-items:center;border-radius:5px;border:1.5px solid;flex:none}
+  .cap-txt{font-weight:600;font-size:12.5px;line-height:1.25;color:#e2e8f0}
+  @media(min-width:640px){.cap-txt{font-size:14px}.cap{padding:10px 12px}}
+  .cap-out{opacity:0!important;pointer-events:none}
+  .cap-hit{opacity:0;filter:brightness(3)}
+  .cap-bad{border-color:#fb7185!important;background:rgba(251,113,133,.16)!important;animation:shake .35s}
+  .cap-right{border-color:#a3e635!important;box-shadow:0 0 24px rgba(163,230,53,.55)!important}
+  .pu{position:absolute;top:0;display:flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;border:2px solid;background:rgba(10,16,34,.94);font-family:'Russo One';font-size:11px;letter-spacing:.06em;will-change:transform;transition:opacity .3s;cursor:pointer;animation:puGlow 1.1s ease-in-out infinite alternate}
+  @keyframes puGlow{from{box-shadow:0 0 8px currentColor}to{box-shadow:0 0 22px currentColor}}
+
+  /* ===== сервер ===== */
+  #serverLine{position:absolute;left:0;right:0;bottom:0;height:46px;background:linear-gradient(to top,rgba(34,211,238,.12),transparent);display:flex;align-items:center;justify-content:center;gap:8px;font-family:'JetBrains Mono';font-size:9px;letter-spacing:.22em;color:rgba(148,197,255,.85);transition:background .2s}
+  #serverLine::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,#22d3ee 0 14px,transparent 14px 28px);animation:dashMove 1.2s linear infinite;opacity:.7}
+  @keyframes dashMove{to{background-position-x:28px}}
+  #serverLine.hit{background:linear-gradient(to top,rgba(251,113,133,.3),transparent)}
+
+  /* ===== служебные анимации ===== */
+  .shaking{animation:shake .35s}
+  @keyframes shake{0%,100%{transform:none}20%{transform:translate(-7px,2px)}40%{transform:translate(6px,-3px)}60%{transform:translate(-5px,2px)}80%{transform:translate(3px,-1px)}}
+  .floaty{position:fixed;z-index:60;pointer-events:none;font-family:'Russo One';font-size:18px;transform:translate(-50%,0);animation:floatScore .95s ease-out forwards;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+  @keyframes floatScore{to{transform:translate(-50%,-72px);opacity:0}}
+  .ovl{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(4,8,20,.8);backdrop-filter:blur(6px)}
+  .ovl-card{animation:popIn .3s cubic-bezier(.2,1.4,.4,1)}
+  @keyframes popIn{from{transform:scale(.86);opacity:0}}
+  .pip{width:18px;height:11px;transform:skewX(-18deg);border-radius:2px;transition:all .25s}
+  .pip-on{background:#a3e635;box-shadow:0 0 10px rgba(163,230,53,.6)}
+  .pip-off{background:#16223f;border:1px solid #1e2c52}
+  .dotq{width:9px;height:9px;border-radius:2px;transition:all .3s}
+  .dotq-on{background:#22d3ee;box-shadow:0 0 8px rgba(34,211,238,.7)}
+  .dotq-off{background:#16223f;border:1px solid #1e2c52}
+  #comboChip.pop{animation:comboPop .3s}
+  @keyframes comboPop{40%{transform:scale(1.25)}}
+  .dotlive{width:8px;height:8px;border-radius:99px;background:#a3e635;box-shadow:0 0 8px #a3e635;animation:liveP 1.4s infinite}
+  @keyframes liveP{50%{opacity:.35}}
+  .statbox{border:1px solid #1e2c52;background:rgba(6,11,26,.55);border-radius:8px;padding:8px 10px}
+</style>
+</head>
+
+<body class="bg-ink text-slate-100 font-body">
+
+<!-- ФОН -->
+<div id="bgBase"></div>
+<div id="glyphs"></div>
+<div id="gridfloor"></div>
+<div id="horizon"></div>
+<div id="scanlines"></div>
+<div id="vignette"></div>
+<div id="slowTint"></div>
+<div id="hurtFlash"></div>
+<canvas id="fx" class="fixed inset-0 z-30 pointer-events-none"></canvas>
+
+<div id="app" class="relative z-10">
+
+  <!-- ======================= СТАРТ ======================= -->
+  <section id="scr-start" class="absolute inset-0 z-20 flex flex-col overflow-y-auto">
+    <div class="mx-auto w-full max-w-5xl px-4 sm:px-6 flex-1 flex flex-col">
+
+      <div class="flex items-center justify-between py-3 font-mono text-[10px] sm:text-xs text-slate-400 border-b border-line/60">
+        <span class="flex items-center gap-2"><span class="dotlive"></span>КИБЕРЩИТ // ТРЕНАЖЁР v2.5</span>
+        <span class="hidden sm:block">СТАТУС СЕТИ: <b class="text-acid">ОНЛАЙН</b></span>
+        <span>РЕКОРД: <b class="text-sun" id="menuBest">0</b></span>
+      </div>
+
+      <div class="grid lg:grid-cols-[1.15fr,.85fr] gap-6 lg:gap-10 items-center flex-1 py-6">
+        <div>
+          <p class="font-mono text-neo text-[11px] sm:text-sm tracking-[.3em] mb-3">НТО ▸ КИБЕРТЕХ ▸ ТРЕНИРОВКА</p>
+          <h1 class="font-disp leading-[.95] text-[16.5vw] sm:text-7xl lg:text-8xl glitch" data-text="КИБЕР-ЩИТ">КИБЕР-ЩИТ</h1>
+          <p class="mt-4 max-w-md text-slate-300 text-sm sm:text-base leading-relaxed">Аркадный тренажёр к олимпиаде: лови верные ответы, пока пакеты не долетели до сервера, и прокачивай знания по кибербезопасности.</p>
+          <div class="font-mono text-xs sm:text-sm text-slate-500 mt-4 h-5" id="term">&gt;</div>
+          <div class="mt-6 flex flex-wrap items-center gap-3">
+            <button id="btnStart" class="btn btn-acid text-base sm:text-lg px-8 py-4">▶ НАЧАТЬ ЗАЩИТУ</button>
+            <button id="btnHow" class="btn btn-ghost px-5 py-3.5 text-sm">ИНСТРУКТАЖ</button>
+            <button id="btnSndMenu" class="btn btn-ghost px-4 py-3.5 text-sm">🔊</button>
+          </div>
+          <p class="mt-3 font-mono text-[10px] text-slate-500 tracking-wider">6–7 КЛАСС • СЕНСОРНЫЕ ЭКРАНЫ • 40 ВОПРОСОВ</p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="panel corner p-4 sm:p-5">
+            <p class="font-disp text-sm tracking-widest text-neo mb-3">◈ БРИФИНГ ПЕРЕД СМЕНОЙ</p>
+            <ul class="space-y-2 text-[13px] sm:text-sm text-slate-300 leading-snug">
+              <li class="flex gap-2"><span>📡</span>Вопрос вверху — пакеты с ответами падают вниз.</li>
+              <li class="flex gap-2"><span>👆</span>Тапни по верному, пока он не долетел до сервера.</li>
+              <li class="flex gap-2"><span>🔥</span>Серия верных ответов включает множитель до ×4.</li>
+              <li class="flex gap-2"><span>💎</span>Лови бонусы: щит, слоу-мо и подсказку 50/50.</li>
+              <li class="flex gap-2"><span>❤️</span>Ошибка или промах — минус один щит.</li>
+            </ul>
+          </div>
+          <div class="panel corner p-4 sm:p-5">
+            <p class="font-disp text-sm tracking-widest text-sun mb-3">◈ СЕКТОРА ЗНАНИЙ</p>
+            <div class="grid grid-cols-2 gap-2 text-[12px] font-semibold">
+              <div class="rounded-md border px-3 py-2" style="border-color:#22d3ee66;color:#22d3ee">🔐 Криптография</div>
+              <div class="rounded-md border px-3 py-2" style="border-color:#fbbf2466;color:#fbbf24">🌐 Сети</div>
+              <div class="rounded-md border px-3 py-2" style="border-color:#a3e63566;color:#a3e635">🛡️ Защита</div>
+              <div class="rounded-md border px-3 py-2" style="border-color:#f472b666;color:#f472b6">💾 Данные</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-line/60 py-2 overflow-hidden bg-panel/60">
+      <div class="ticker font-mono text-[11px] text-slate-400 tracking-[.25em]">
+        <span class="px-4">ШИФР ЦЕЗАРЯ ✦ АЗБУКА МОРЗЕ ✦ IP И DNS ✦ ФИШИНГ ✦ ПАРОЛИ ✦ ДВОИЧНЫЙ КОД ✦ ХЕШИ ✦ БРАНДМАУЭР ✦ СОЦИАЛЬНАЯ ИНЖЕНЕРИЯ ✦ HTTPS ✦</span>
+        <span class="px-4">ШИФР ЦЕЗАРЯ ✦ АЗБУКА МОРЗЕ ✦ IP И DNS ✦ ФИШИНГ ✦ ПАРОЛИ ✦ ДВОИЧНЫЙ КОД ✦ ХЕШИ ✦ БРАНДМАУЭР ✦ СОЦИАЛЬНАЯ ИНЖЕНЕРИЯ ✦ HTTPS ✦</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ИГРА ======================= -->
+  <section id="scr-game" class="absolute inset-0 z-20 hidden flex-col">
+    <div id="shell" class="relative mx-auto w-full max-w-3xl h-full flex flex-col px-2 sm:px-3 pt-2">
+
+      <header class="flex items-center gap-2 sm:gap-3">
+        <div id="pips" class="flex gap-1.5"></div>
+        <div class="flex-1 text-center">
+          <div id="scoreVal" class="font-disp text-2xl sm:text-3xl leading-none tracking-wider">000000</div>
+          <div class="font-mono text-[9px] sm:text-[10px] text-slate-400 tracking-widest">РЕКОРД <span id="hudBest">0</span></div>
+        </div>
+        <button id="btnPause" class="icon-btn">⏸</button>
+        <button id="btnSnd" class="icon-btn">🔊</button>
+      </header>
+
+      <div class="mt-2 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="chip text-neo border-neo/40" id="lvlChip">LVL 1</span>
+          <div id="dots" class="flex gap-1.5"></div>
+        </div>
+        <span id="comboChip" class="chip hidden text-sun border-sun/50 font-bold">🔥 СЕРИЯ ×2</span>
+      </div>
+
+      <div id="qbar" class="corner panel mt-2 px-3 sm:px-4 py-2.5 sm:py-3">
+        <div class="flex items-center gap-2 mb-1">
+          <span id="qCatChip" class="font-mono text-[9px] sm:text-[10px] px-2 py-0.5 rounded border tracking-widest">🔐 КРИПТОГРАФИЯ</span>
+          <span id="qNum" class="font-mono text-[9px] text-slate-500 ml-auto">#01</span>
+        </div>
+        <p id="qText" class="text-[15px] sm:text-lg font-bold leading-snug"></p>
+      </div>
+
+      <div id="field" class="relative flex-1 mt-2 mb-1 overflow-hidden min-h-0" oncontextmenu="return false">
+        <div class="absolute inset-y-0 left-1/4 w-px bg-line/30"></div>
+        <div class="absolute inset-y-0 left-2/4 w-px bg-line/30"></div>
+        <div class="absolute inset-y-0 left-3/4 w-px bg-line/30"></div>
+
+        <div id="toast" class="absolute top-2 left-1/2 -translate-x-1/2 z-40 chip !text-[11px] opacity-0 -translate-y-2 transition-all duration-300 pointer-events-none whitespace-nowrap"></div>
+
+        <div id="whyToast" class="absolute left-1/2 -translate-x-1/2 bottom-[54px] w-[93%] max-w-md z-40 opacity-0 translate-y-2 transition-all duration-300 pointer-events-none">
+          <div class="panel corner px-3 py-2 border-l-4" id="whyInner">
+            <p class="font-disp text-[11px] tracking-widest" id="whyTitle">✔ ВЕРНО</p>
+            <p class="text-xs text-slate-300 leading-snug mt-0.5" id="whyBody"></p>
+          </div>
+        </div>
+
+        <div id="serverLine">🖥 СЕРВЕР ШКОЛЫ — НЕ ПРОПУСТИ ОШИБКИ</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ОВЕРЛЕИ ======================= -->
+  <div id="ovlHow" class="ovl hidden">
+    <div class="ovl-card panel corner p-5 sm:p-6 max-w-md w-full">
+      <p class="font-disp text-lg text-neo tracking-widest mb-3">◈ ИНСТРУКТАЖ</p>
+      <ul class="space-y-2.5 text-sm text-slate-300 leading-snug">
+        <li>📡 После вопроса сверху падают <b class="text-white">4 пакета с ответами</b>.</li>
+        <li>👆 Жми на верный. Чем раньше — тем больше бонус скорости.</li>
+        <li>⚠ Если <b class="text-danger">верный пакет</b> долетел до сервера — минус щит.</li>
+        <li>🔥 Серия из 3+ верных включает множитель <b class="text-sun">×2…×4</b>.</li>
+        <li>💎 Бонусы: <span class="text-acid">🛡️ +щит</span>, <span class="text-neo">⏳ слоу-мо</span>, <span class="text-sun">💡 убирает 2 неверных</span>.</li>
+        <li>📈 Каждые 5 вопросов — новый уровень и рост скорости.</li>
+        <li class="font-mono text-xs text-slate-500 pt-1">Клавиатура: 1–4 — ответ, P — пауза, M — звук.</li>
+      </ul>
+      <button id="btnHowClose" class="btn btn-neo w-full py-3 mt-4">ПОНЯТНО</button>
+    </div>
+  </div>
+
+  <div id="ovlPause" class="ovl hidden">
+    <div class="ovl-card panel corner p-6 max-w-sm w-full text-center">
+      <p class="font-mono text-xs text-slate-400 tracking-[.3em] mb-1">// СИСТЕМА ОЖИДАЕТ</p>
+      <p class="font-disp text-3xl tracking-widest mb-5">ПАУЗА</p>
+      <div class="space-y-3">
+        <button id="btnResume" class="btn btn-acid w-full py-3.5">▶ ПРОДОЛЖИТЬ</button>
+        <button id="btnSndPause" class="btn btn-ghost w-full py-3">ЗВУК: ВКЛ</button>
+        <button id="btnQuit" class="btn btn-ghost w-full py-3">В МЕНЮ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ovlLevel" class="ovl hidden">
+    <div class="ovl-card panel corner p-6 max-w-sm w-full text-center">
+      <p class="font-mono text-xs text-acid tracking-[.3em] mb-1">СЕКТОР ЗАЧИЩЕН ✔</p>
+      <p class="font-disp text-4xl tracking-widest mb-1" id="lvlBig">УРОВЕНЬ 2</p>
+      <p class="text-sm text-slate-400 mb-4">Пакеты летят быстрее. Держи оборону!</p>
+      <div class="text-left rounded-md border border-sun/40 bg-sun/5 p-3 mb-5">
+        <p class="font-mono text-[10px] text-sun tracking-widest mb-1">📎 ФАКТ ИЗ МИРА КИБЕРБЕЗА</p>
+        <p class="text-[13px] text-slate-200 leading-snug" id="lvlFact"></p>
+      </div>
+      <button id="btnGo" class="btn btn-neo w-full py-3.5">В БОЙ ▶</button>
+    </div>
+  </div>
+
+  <div id="ovlOver" class="ovl hidden">
+    <div class="ovl-card panel corner p-5 sm:p-6 max-w-md w-full text-center">
+      <p class="font-mono text-xs text-danger tracking-[.3em] mb-1">// ЩИТЫ НА НУЛЕ</p>
+      <p class="font-disp text-3xl sm:text-4xl tracking-widest mb-3">СБОЙ ЗАЩИТЫ</p>
+      <p class="font-mono text-[10px] text-slate-400 tracking-widest">ТВОЁ ЗВАНИЕ</p>
+      <p class="font-disp text-xl sm:text-2xl mb-2" id="ovRank">НОВИЧОК СЕТИ</p>
+      <div class="flex items-end justify-center gap-2 mb-4">
+        <span class="font-disp text-4xl sm:text-5xl text-sun" id="ovScore">0</span>
+        <span class="chip text-acid border-acid/50 hidden mb-2" id="ovNew">НОВЫЙ РЕКОРД!</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+        <div class="statbox"><p class="font-disp text-lg" id="ovLevel">1</p><p class="font-mono text-[9px] text-slate-400 tracking-wider">УРОВЕНЬ</p></div>
+        <div class="statbox"><p class="font-disp text-lg" id="ovAcc">0%</p><p class="font-mono text-[9px] text-slate-400 tracking-wider">ТОЧНОСТЬ</p></div>
+        <div class="statbox"><p class="font-disp text-lg" id="ovStreak">0</p><p class="font-mono text-[9px] text-slate-400 tracking-wider">СЕРИЯ</p></div>
+      </div>
+      <p class="font-mono text-[10px] text-slate-500 tracking-wider mb-1">СОВЕТ</p>
+      <p class="text-[13px] text-slate-300 leading-snug mb-4" id="ovTip"></p>
+      <div class="flex gap-3">
+        <button id="btnRetry" class="btn btn-acid flex-1 py-3.5">↻ ЕЩЁ РАЗ</button>
+        <button id="btnMenu" class="btn btn-ghost flex-1 py-3.5">В МЕНЮ</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(() => {
+'use strict';
+/* ================= ДАННЫЕ ================= */
+const CATS = {
+  crypto:{name:'КРИПТОГРАФИЯ', icon:'🔐', color:'#22d3ee'},
+  net:{name:'СЕТИ', icon:'🌐', color:'#fbbf24'},
+  sec:{name:'ЗАЩИТА', icon:'🛡️', color:'#a3e635'},
+  data:{name:'ДАННЫЕ', icon:'💾', color:'#f472b6'}
+};
+const QUESTIONS = [
+ {c:'crypto',q:'Шифр Цезаря — это замена каждой буквы на…',a:['букву со сдвигом по алфавиту','букву в обратном порядке','случайный символ','цифру'],ok:0,why:'Цезарь сдвигал каждую букву своих писем на 3 позиции вперёд.'},
+ {c:'crypto',q:'Сдвинь слово ДОМ на 1 букву вперёд по алфавиту:',a:['ДОН','ЕОР','ЕПН','ЖПН'],ok:2,why:'Каждая буква заменяется следующей: Д→Е, О→П, М→Н.'},
+ {c:'crypto',q:'В шифре Цезаря буква А превратилась в Г. Какой сдвиг?',a:['1','2','3','4'],ok:2,why:'А→Б→В→Г — ровно три шага по алфавиту.'},
+ {c:'crypto',q:'Как в азбуке Морзе выглядит сигнал бедствия SOS?',a:['––– ••• –––','••• ––– •••','•–– •–– •––','• • • • • •'],ok:1,why:'Три точки, три тире, три точки — этот сигнал знали все корабли.'},
+ {c:'crypto',q:'Слово ШИФР записали задом наперёд:',a:['ФИРШ','ШРИФ','РФИШ','ИФРШ'],ok:2,why:'Реверс — один из древнейших шифров перестановки.'},
+ {c:'crypto',q:'Криптография — это наука о…',a:['тайной передаче информации','устройстве процессоров','создании сайтов','роботах'],ok:0,why:'От греческого «криптос» — тайный.'},
+ {c:'crypto',q:'Стеганография — это…',a:['сокрытие самого факта передачи','самый стойкий шифр','быстрая передача','сжатие файлов'],ok:0,why:'Например, сообщение можно спрятать внутри картинки.'},
+ {c:'crypto',q:'Замена: А→@, Б→#, В→$. Как выглядит АБВВ?',a:['@#$@','@$#@','@#$$','#@$$'],ok:2,why:'Каждая буква заменяется своим символом: @ # $ $.'},
+ {c:'crypto',q:'Сцитала — это…',a:['древняя шифровалка Спарты','имя хакера','компьютерный вирус','вид антенны'],ok:0,why:'Ленту с письмом наматывали на палку: прочитать мог владелец такой же.'},
+ {c:'crypto',q:'Что помогает взломать шифр простой замены?',a:['частотный анализ','выключение света','подбор картинки','дефрагментация'],ok:0,why:'Частые буквы (О, Е, А) узнаются даже в шифре.'},
+ {c:'net',q:'IP-адрес — это…',a:['уникальный адрес устройства в сети','пароль от Wi-Fi','название браузера','номер монитора'],ok:0,why:'Как почтовый адрес, только для компьютеров.'},
+ {c:'net',q:'Какой протокол передаёт веб-страницы?',a:['SMTP','HTTP','USB','GPS'],ok:1,why:'HTTP — HyperText Transfer Protocol, протокол передачи гипертекста.'},
+ {c:'net',q:'Зачем нужен DNS?',a:['переводит имя сайта в IP-адрес','ускоряет интернет','удаляет вирусы','раздаёт Wi-Fi'],ok:0,why:'DNS — «телефонная книга» интернета: school.ru → IP-адрес.'},
+ {c:'net',q:'Что делает роутер?',a:['направляет данные между сетями','печатает документы','хранит пароли','рисует сайты'],ok:0,why:'Он выбирает маршрут для пакетов, как регулировщик.'},
+ {c:'net',q:'Пакет в сети — это…',a:['кусочек данных с адресом','вид кабеля','программа','папка'],ok:0,why:'Файлы передаются по частям-пакетам и собираются у получателя.'},
+ {c:'net',q:'Чем HTTPS лучше HTTP?',a:['шифрует данные','он быстрее','он бесплатнее','красивее'],ok:0,why:'S — secure, защищённый. Замочек в адресной строке — это про него.'},
+ {c:'net',q:'Wi-Fi передаёт данные через…',a:['радиоволны','провода','звук','лазер'],ok:0,why:'Роутер общается с устройствами радиосигналами.'},
+ {c:'net',q:'Что из этого — доменное имя?',a:['192.168.0.1','school.ru','C:\\Games','game.exe'],ok:1,why:'Домен — «человеческое» имя сайта в интернете.'},
+ {c:'net',q:'Локальная сеть — это…',a:['устройства на небольшом пространстве','весь интернет','одна программа','вид вируса'],ok:0,why:'Например, компьютеры класса или домашние устройства.'},
+ {c:'net',q:'Сервер — это компьютер, который…',a:['обслуживает запросы других устройств','только печатает','только играет','не выходит в сеть'],ok:0,why:'Сайты хранятся на серверах и по запросу отдают страницы.'},
+ {c:'sec',q:'Какой пароль самый надёжный?',a:['дата рождения','123456','длинный из разных символов','кличка питомца'],ok:2,why:'Длина и разнообразие символов резко усложняют подбор.'},
+ {c:'sec',q:'Фишинг — это…',a:['поддельные письма и сайты ради кражи данных','вид антивируса','быстрый интернет','игра'],ok:0,why:'Fishing — «рыбалка»: пароли выманивают «на наживку».'},
+ {c:'sec',q:'Двухфакторная защита — это пароль плюс…',a:['второе подтверждение (код, ключ)','второй пароль','второй компьютер','антивирус'],ok:0,why:'Например, пароль + код из СМС.'},
+ {c:'sec',q:'Компьютерный вирус — это…',a:['программа, заражающая другие файлы','деталь системного блока','ошибка в тексте','вид сети'],ok:0,why:'Вирус умеет копировать себя в чужие файлы.'},
+ {c:'sec',q:'Брандмауэр (файрвол) нужен, чтобы…',a:['фильтровать трафик и защищать от атак','ускорять игры','хранить фото','печатать'],ok:0,why:'Он проверяет входящие и исходящие данные по правилам.'},
+ {c:'sec',q:'Письмо: «Вы выиграли миллион! Оплатите комиссию». Это…',a:['мошенничество','удача','подарок','вирус принтера'],ok:0,why:'Классическая уловка, чтобы выманить деньги.'},
+ {c:'sec',q:'Троян — это…',a:['вредонос под видом полезной программы','защитная утилита','игра про коня','вид кабеля'],ok:0,why:'Как троянский конь: заходит с «подарком» внутри.'},
+ {c:'sec',q:'Нашёл чужую флешку на улице. Что делать?',a:['не вставлять в свой компьютер','посмотреть файлы','отформатировать','подарить другу'],ok:0,why:'На ней могут быть вирусы-ловушки.'},
+ {c:'sec',q:'Социальная инженерия — это…',a:['обман людей ради секретных данных','ремонт компьютеров','соцсети','шифр'],ok:0,why:'Обмануть человека часто проще, чем взломать машину.'},
+ {c:'sec',q:'Антивирус нужен, чтобы…',a:['находить и обезвреживать вредоносы','скачивать фильмы','рисовать','ускорять Wi-Fi'],ok:0,why:'Это доктор и прививка для компьютера.'},
+ {c:'data',q:'Минимальная единица информации — это…',a:['байт','бит','пиксель','мегабайт'],ok:1,why:'Бит — это 0 или 1.'},
+ {c:'data',q:'Сколько бит в одном байте?',a:['4','8','16','10'],ok:1,why:'В байте 8 бит — обычно этого хватает на один символ.'},
+ {c:'data',q:'Число 5 в двоичном виде:',a:['110','011','101','111'],ok:2,why:'101 = 4 + 0 + 1.'},
+ {c:'data',q:'Двоичное 10 — сколько это в десятичной?',a:['10','2','1','20'],ok:1,why:'1×2 + 0 = 2.'},
+ {c:'data',q:'Сколько разных значений поместится в 3 битах?',a:['3','6','8','16'],ok:2,why:'2³ = 8 вариантов: от 000 до 111.'},
+ {c:'data',q:'Один килобайт — это…',a:['1000 бит','1024 байта','100 байт','8 бит'],ok:1,why:'2¹⁰ = 1024.'},
+ {c:'data',q:'Хеш файла — это его…',a:['размер','название','цифровой «отпечаток»','пароль'],ok:2,why:'Хеш меняется даже от крошечного изменения файла.'},
+ {c:'data',q:'Двоичное 11 в десятичной равно…',a:['2','3','11','4'],ok:1,why:'2 + 1 = 3.'},
+ {c:'data',q:'Число 4 в двоичной — это 100. Сколько в нём нулей?',a:['1','2','3','0'],ok:1,why:'100: одна единица и два нуля.'},
+ {c:'data',q:'Пиксель — это…',a:['наименьшая точка изображения','единица звука','вид вируса','деталь мыши'],ok:0,why:'Картинка — мозаика из пикселей.'}
+];
+const FACTS = [
+ 'Первый известный вирус «Creeper» (1971) писал на экране: «Я Крипер! Поймай меня, если сможешь!»',
+ 'Юлий Цезарь шифровал приказы сдвигом на 3 буквы — так появился шифр Цезаря.',
+ 'Пароль «123456» много лет входит в топ самых популярных. Не будь как все!',
+ 'Шифровальную машину «Энигма» взломала команда Алана Тьюринга.',
+ 'Слово «вирус» переводится с латыни как «яд».',
+ 'Первое в истории SMS (1992) содержало текст «Happy New Year».',
+ 'В одном байте 8 бит — обычно этого хватает, чтобы закодировать один символ.',
+ 'Отличный пароль — фраза из 4 случайных слов, например «СинийТостерЛетит42».',
+ 'Азбуке Морзе почти 180 лет — её до сих пор знают моряки.',
+ 'Хеш-функция односторонняя: из «отпечатка» файл не восстановить.'
+];
+
+/* ================= ХЕЛПЕРЫ ================= */
+const $ = s => document.querySelector(s);
+const rnd = (a,b) => a + Math.random()*(b-a);
+const irnd = n => Math.floor(Math.random()*n);
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const shuffle = arr => { for(let i=arr.length-1;i>0;i--){const j=irnd(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]} return arr; };
+
+/* ================= ЗВУК (WebAudio) ================= */
+let actx = null;
+function ac(){ if(!actx) actx = new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume(); return actx; }
+function tone(f,d,type='square',vol=.12,delay=0,slide=0){
+  if(S.muted) return; const c=ac(), t=c.currentTime+delay;
+  const o=c.createOscillator(), g=c.createGain(); o.type=type;
+  o.frequency.setValueAtTime(f,t); if(slide) o.frequency.exponentialRampToValueAtTime(slide,t+d);
+  g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g).connect(c.destination); o.start(t); o.stop(t+d+.02);
+}
+function boom(){
+  if(S.muted) return; const c=ac(), len=c.sampleRate*.22, b=c.createBuffer(1,len,c.sampleRate), d=b.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len);
+  const s=c.createBufferSource(); s.buffer=b; const f=c.createBiquadFilter(); f.type='lowpass'; f.frequency.value=900;
+  const g=c.createGain(); g.gain.value=.2; s.connect(f).connect(g).connect(c.destination); s.start();
+}
+const sfx = {
+  click(){ tone(640,.05,'square',.07); },
+  correct(){ tone(660,.09); tone(880,.11,'square',.12,.09); tone(1320,.15,'square',.1,.18); },
+  wrong(){ tone(170,.25,'sawtooth',.16); tone(110,.3,'sawtooth',.14,.06); },
+  leak(){ tone(320,.28,'sawtooth',.16,0,70); },
+  power(){ [520,660,780,1040].forEach((f,i)=>tone(f,.09,'triangle',.12,i*.06)); },
+  level(){ [523,659,784,1046].forEach((f,i)=>tone(f,.13,'square',.12,i*.11)); },
+  over(){ [440,349,293,196].forEach((f,i)=>tone(f,.22,'sawtooth',.13,i*.16)); }
+};
+
+/* ================= СОСТОЯНИЕ ================= */
+const QPL = 5, SERVER_H = 46;
+const S = {
+  running:false, paused:false, frozen:false, overlay:'none',
+  muted: localStorage.getItem('cs_mute')==='1',
+  score:0, disp:0, best:+(localStorage.getItem('cs_best')||0),
+  hp:4, level:1, qInLevel:0, qNum:0,
+  streak:0, bestStreak:0, correct:0, answered:0,
+  slowUntil:0, current:null
+};
+let deck=[], deckPos=0, caps=[], pus=[], whyTimer=null, toastTimer=null;
+const field=$('#field');
+const fW=()=>field.clientWidth, fH=()=>field.clientHeight;
+const fallMs = () => clamp(14700 - (S.level - 1) * 1050, 6300, 14700);
+
+/* ================= ЧАСТИЦЫ (canvas) ================= */
+const fx=$('#fx'), fctx=fx.getContext('2d');
+function sizeFx(){ const d=window.devicePixelRatio||1; fx.width=innerWidth*d; fx.height=innerHeight*d; fctx.setTransform(d,0,0,d,0,0); }
+sizeFx(); addEventListener('resize',sizeFx);
+let parts=[], rings=[];
+function burst(x,y,color,n=24,pow=1){
+  for(let i=0;i<n;i++){ const a=Math.random()*6.283, sp=(2+Math.random()*5)*pow;
+    parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1,g:.14,life:1,decay:.02+Math.random()*.025,size:2+Math.random()*3,color});
+  }
+}
+function ringFx(x,y,color){ rings.push({x,y,r:6,v:7,alpha:.9,color}); }
+function drawFx(){
+  fctx.clearRect(0,0,innerWidth,innerHeight);
+  rings=rings.filter(r=>r.alpha>0);
+  for(const r of rings){ r.r+=r.v; r.alpha-=.045; fctx.globalAlpha=Math.max(0,r.alpha); fctx.strokeStyle=r.color; fctx.lineWidth=3; fctx.beginPath(); fctx.arc(r.x,r.y,r.r,0,6.283); fctx.stroke(); }
+  parts=parts.filter(p=>p.life>0);
+  for(const p of parts){ p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.life-=p.decay;
+    fctx.globalAlpha=Math.max(0,p.life); fctx.fillStyle=p.color; fctx.fillRect(p.x,p.y,p.size,p.size); }
+  fctx.globalAlpha=1;
+}
+
+/* ================= ЖИВОЙ ФОН: глифы ================= */
+const GLYPHS=['0','1','{','}','#','$','%','&','@','?','*','§','λ','Σ','0x2F','404','101','</>','01','FF'];
+const GLYPH_COLORS=['#22d3ee','#f472b6','#a3e635','#fbbf24','#60a5fa'];
+let glyphN=0;
+setInterval(()=>{
+  if(document.hidden||glyphN>34) return;
+  const s=document.createElement('span'); s.className='glyph';
+  s.textContent=GLYPHS[irnd(GLYPHS.length)];
+  s.style.left=rnd(0,100)+'%';
+  s.style.fontSize=rnd(10,22)+'px';
+  s.style.color=GLYPH_COLORS[irnd(GLYPH_COLORS.length)];
+  s.style.setProperty('--o',rnd(.12,.34).toFixed(2));
+  s.style.animationDuration=rnd(9,18)+'s';
+  s.addEventListener('animationend',()=>{s.remove();glyphN--;});
+  $('#glyphs').appendChild(s); glyphN++;
+},600);
+
+/* ================= UI ================= */
+function renderPips(){
+  const el=$('#pips'); el.innerHTML='';
+  for(let i=0;i<5;i++){ const d=document.createElement('div'); d.className='pip '+(i<S.hp?'pip-on':'pip-off'); el.appendChild(d); }
+}
+function renderDots(){
+  const el=$('#dots'); el.innerHTML='';
+  for(let i=0;i<QPL;i++){ const d=document.createElement('div'); d.className='dotq '+(i<S.qInLevel?'dotq-on':'dotq-off'); el.appendChild(d); }
+}
+function updateCombo(){
+  const chip=$('#comboChip'), combo=Math.min(4,1+Math.floor(S.streak/3));
+  if(S.streak>=2){ chip.textContent=`🔥 СЕРИЯ ×${combo}`; chip.classList.remove('hidden','pop'); void chip.offsetWidth; chip.classList.add('pop'); }
+  else chip.classList.add('hidden');
+}
+function floatText(txt,x,y,color){
+  const d=document.createElement('div'); d.className='floaty'; d.textContent=txt;
+  d.style.left=x+'px'; d.style.top=y+'px'; d.style.color=color;
+  document.body.appendChild(d); setTimeout(()=>d.remove(),1000);
+}
+function toast(msg,color){
+  const t=$('#toast'); t.textContent=msg; t.style.color=color; t.style.borderColor=color;
+  t.classList.remove('opacity-0','-translate-y-2');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.add('opacity-0','-translate-y-2'),1700);
+}
+function showWhy(text,ok,missed){
+  const w=$('#whyToast'), inner=$('#whyInner'), title=$('#whyTitle');
+  title.textContent = ok?'✔ ВЕРНО!':(missed?'⚠ ПАКЕТ ПРОРВАЛСЯ!':'✖ ОШИБКА');
+  title.style.color = ok?'#a3e635':(missed?'#fbbf24':'#fb7185');
+  inner.style.borderLeftColor = title.style.color;
+  $('#whyBody').textContent=text;
+  w.classList.remove('opacity-0','translate-y-2');
+  clearTimeout(whyTimer); whyTimer=setTimeout(()=>w.classList.add('opacity-0','translate-y-2'), ok?1400:2200);
+}
+function shake(){ const sh=$('#shell'); sh.classList.remove('shaking'); void sh.offsetWidth; sh.classList.add('shaking'); }
+function hurt(){ const h=$('#hurtFlash'); h.style.transition='none'; h.style.opacity=1; setTimeout(()=>{h.style.transition='opacity .5s';h.style.opacity=0;},120); }
+
+/* ================= ИГРОВОЙ ЦИКЛ ================= */
+function drawQ(){ if(deckPos>=deck.length){ shuffle(deck); deckPos=0; } return QUESTIONS[deck[deckPos++]]; }
+
+function clearField(){
+  caps.forEach(c=>c.el.remove()); pus.forEach(p=>p.el.remove());
+  caps=[]; pus=[];
+}
+function fadeRest(keep=[]){
+  for(const c of caps){ if(c.alive && !keep.includes(c)) c.el.classList.add('cap-out'); }
+}
+
+function spawnQuestion(){
+  if(!S.running) return;
+  S.frozen=false; clearField();
+  const q=S.current=drawQ(); S.qNum++;
+  renderDots();
+  const cat=CATS[q.c];
+  const chip=$('#qCatChip');
+  chip.textContent=`${cat.icon} ${cat.name}`;
+  chip.style.color=cat.color; chip.style.borderColor=cat.color+'77';
+  $('#qNum').textContent='#'+String(S.qNum).padStart(2,'0');
+  $('#qText').textContent=q.q;
+  const order=shuffle([0,1,2,3]);
+  order.forEach((real,pos)=>setTimeout(()=>{ if(S.running && !S.frozen) spawnCap(pos,q.a[real],cat,real); },230+pos*300));
+  maybePower();
+}
+
+function spawnCap(pos,text,cat,real){
+  const el=document.createElement('button'); el.type='button'; el.className='cap';
+  el.style.borderColor=cat.color;
+  el.style.boxShadow=`0 6px 18px rgba(0,0,0,.45), 0 0 14px ${cat.color}33`;
+  el.innerHTML=`<span class="cap-key" style="color:${cat.color};border-color:${cat.color};background:${cat.color}14">${'АБВГ'[pos]}</span><span class="cap-txt">${text}</span>`;
+  field.appendChild(el);
+  const lw=fW()/4, w=Math.max(58,lw-10); el.style.width=w+'px';
+  const h=el.offsetHeight;
+  const c={el,lane:pos,real,w,h,y:-h-8,speed:(fH()-SERVER_H+h)/(fallMs()/1000),alive:true,ph:Math.random()*6};
+  el.style.transform=`translate(${pos*lw+(lw-w)/2}px,${c.y}px)`;
+  el.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();answerTap(c);});
+  caps.push(c);
+}
+
+function maybePower(){
+  if(S.qNum<2||Math.random()>.42) return;
+  const t=['shield','slow','hint'][irnd(3)];
+  setTimeout(()=>{ if(S.running && !S.frozen) spawnPower(t); },1500);
+}
+function spawnPower(t){
+  const DEF={shield:{icon:'🛡️',label:'+ЩИТ',color:'#a3e635'},slow:{icon:'⏳',label:'СЛОУ-МО',color:'#22d3ee'},hint:{icon:'💡',label:'50/50',color:'#fbbf24'}}[t];
+  const el=document.createElement('button'); el.type='button'; el.className='pu';
+  el.style.borderColor=DEF.color; el.style.color=DEF.color;
+  el.innerHTML=`${DEF.icon}<span>${DEF.label}</span>`;
+  field.appendChild(el);
+  const lw=fW()/4, lane=irnd(4), w=el.offsetWidth, h=el.offsetHeight;
+  const p={el,t,lane,w,h,y:-h-8,speed:(fH()-SERVER_H+h)/((fallMs()*1.7)/1000),alive:true,ph:Math.random()*6};
+  el.style.transform=`translate(${lane*lw+(lw-w)/2}px,${p.y}px)`;
+  el.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();collectPower(p);});
+  pus.push(p);
+}
+
+function answerTap(c){
+  if(!S.running||S.frozen||S.paused||!c.alive) return;
+  S.frozen=true; S.answered++;
+  const q=S.current, cat=CATS[q.c];
+  if(c.real===q.ok){
+    S.correct++; S.streak++; S.bestStreak=Math.max(S.bestStreak,S.streak);
+    const combo=Math.min(4,1+Math.floor(S.streak/3));
+    const alt=Math.max(0,1-(c.y+c.h)/(fH()-SERVER_H));
+    const gain=(100+Math.round(alt*60))*combo;
+    S.score+=gain;
+    const r=c.el.getBoundingClientRect();
+    burst(r.left+r.width/2,r.top+r.height/2,cat.color,26); ringFx(r.left+r.width/2,r.top+r.height/2,cat.color);
+    boom(); sfx.correct();
+    floatText(`+${gain}${combo>1?' ×'+combo:''}`,r.left+r.width/2,r.top,cat.color);
+    c.alive=false; c.el.classList.add('cap-hit');
+    fadeRest(); updateCombo(); showWhy(q.why,true);
+    setTimeout(()=>checkLevel(),950);
+  }else{
+    S.streak=0; updateCombo(); sfx.wrong();
+    c.alive=false; c.el.classList.add('cap-bad');
+    const right=caps.find(k=>k.alive&&k.real===q.ok);
+    if(right) right.el.classList.add('cap-right');
+    fadeRest([c,right]);
+    damage(); showWhy(q.why,false);
+    if(S.hp>0) setTimeout(()=>checkLevel(),1500);
+  }
+}
+
+function collectPower(p){
+  if(!S.running||S.paused||!p.alive) return;
+  p.alive=false; sfx.power();
+  const r=p.el.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
+  burst(cx,cy,'#ffffff',14,.7);
+  if(p.t==='shield'){
+    if(S.hp<5){ S.hp++; renderPips(); toast('🛡️ Щит восстановлен!','#a3e635'); }
+    else { S.score+=150; floatText('+150',cx,cy,'#a3e635'); toast('Щит полон: +150 очков','#a3e635'); }
+  }
+  if(p.t==='slow'){ S.slowUntil=performance.now()+6000; toast('⏳ Пакеты замедлены!','#22d3ee'); }
+  if(p.t==='hint'){
+    const wrong=caps.filter(c=>c.alive&&c.real!==S.current.ok);
+    shuffle(wrong).slice(0,2).forEach(c=>{c.alive=false;c.el.classList.add('cap-out');});
+    toast('💡 50/50 — два неверных убраны','#fbbf24');
+  }
+  p.el.classList.add('cap-out'); setTimeout(()=>p.el.remove(),350);
+}
+
+function damage(){
+  S.hp--; renderPips(); hurt(); shake(); sfx.leak();
+  const sl=$('#serverLine'); sl.classList.add('hit'); setTimeout(()=>sl.classList.remove('hit'),400);
+  if(S.hp<=0){ S.frozen=true; setTimeout(gameOver,650); }
+}
+
+function land(c){
+  c.alive=false;
+  if(S.frozen||!S.running||S.paused){ c.el.classList.add('cap-out'); return; }
+  if(c.real===S.current.ok){
+    S.frozen=true; S.answered++; S.streak=0; updateCombo();
+    c.el.classList.add('cap-right');
+    fadeRest([c]); damage();
+    showWhy('Правильный ответ долетел до сервера! '+S.current.why,false,true);
+    if(S.hp>0) setTimeout(()=>checkLevel(),1500);
+  }else{
+    c.el.classList.add('cap-out'); setTimeout(()=>c.el.remove(),380);
+  }
+}
+
+function checkLevel(){
+  if(!S.running) return;
+  S.qInLevel++; renderDots();
+  if(S.qInLevel>=QPL){ S.qInLevel=0; S.level++; showLevelUp(); }
+  else spawnQuestion();
+}
+function showLevelUp(){
+  S.overlay='level';
+  $('#lvlBig').textContent='УРОВЕНЬ '+S.level;
+  $('#lvlFact').textContent=FACTS[irnd(FACTS.length)];
+  $('#ovlLevel').classList.remove('hidden'); sfx.level();
+}
+
+function gameOver(){
+  S.running=false; clearField(); sfx.over();
+  const acc=S.answered?Math.round(S.correct/S.answered*100):0;
+  const rank=S.score>=12000?['ЛЕГЕНДА КИБЕРТЕХА','#22d3ee']:S.score>=7000?['МАСТЕР ШИФРОВ','#f472b6']:S.score>=3500?['СПЕЦИАЛИСТ ЗАЩИТЫ','#a3e635']:S.score>=1200?['СТАЖЁР КИБЕРБЕЗА','#fbbf24']:['НОВИЧОК СЕТИ','#94a3b8'];
+  const rEl=$('#ovRank'); rEl.textContent=rank[0]; rEl.style.color=rank[1];
+  $('#ovScore').textContent=S.score;
+  $('#ovLevel').textContent=S.level;
+  $('#ovAcc').textContent=acc+'%';
+  $('#ovStreak').textContent=S.bestStreak;
+  $('#ovTip').textContent=FACTS[irnd(FACTS.length)];
+  const isNew=S.score>S.best;
+  if(isNew){ S.best=S.score; localStorage.setItem('cs_best',S.best); }
+  $('#ovNew').classList.toggle('hidden',!isNew);
+  $('#ovlOver').classList.remove('hidden'); S.overlay='over';
+}
+
+function resetGame(){
+  Object.assign(S,{score:0,disp:0,hp:4,level:1,qInLevel:0,qNum:0,streak:0,bestStreak:0,correct:0,answered:0,slowUntil:0});
+  deck=shuffle(QUESTIONS.map((_,i)=>i)); deckPos=0;
+  renderPips(); renderDots(); updateCombo();
+  $('#lvlChip').textContent='LVL 1'; $('#hudBest').textContent=S.best;
+  $('#whyToast').classList.add('opacity-0','translate-y-2');
+}
+function startGame(){
+  ac(); sfx.click();
+  $('#scr-start').classList.add('hidden');
+  const g=$('#scr-game'); g.classList.remove('hidden'); g.classList.add('flex');
+  resetGame(); S.running=true; S.paused=false; S.overlay='none';
+  spawnQuestion();
+}
+function toMenu(){
+  S.running=false; clearField();
+  ['ovlPause','ovlLevel','ovlOver','ovlHow'].forEach(id=>$('#'+id).classList.add('hidden'));
+  S.overlay='none';
+  const g=$('#scr-game'); g.classList.add('hidden'); g.classList.remove('flex');
+  $('#scr-start').classList.remove('hidden');
+  $('#menuBest').textContent=S.best;
+}
+
+/* ================= ГЛАВНЫЙ ЦИКЛ ================= */
+let last=performance.now();
+function loop(t){
+  requestAnimationFrame(loop);
+  const dt=Math.min(50,t-last); last=t;
+  // счёт
+  S.disp+=(S.score-S.disp)*.18;
+  const shown=Math.round(S.disp);
+  $('#scoreVal').textContent=String(shown).padStart(6,'0');
+  // слоу-мо
+  const slow=t<S.slowUntil;
+  $('#slowTint').style.opacity=slow?1:0;
+  // падение
+  if(S.running&&!S.paused&&!S.frozen){
+    const lw=fW()/4, landY=fH()-SERVER_H;
+    for(const c of caps){ if(!c.alive) continue;
+      c.y+=c.speed*(slow?.45:1)*dt/1000;
+      c.el.style.transform=`translate(${c.lane*lw+(lw-c.w)/2}px,${c.y}px) rotate(${Math.sin(t/480+c.ph)*1.6}deg)`;
+      if(c.y+c.h>=landY) land(c);
+    }
+    for(const p of pus){ if(!p.alive) continue;
+      p.y+=p.speed*(slow?.45:1)*dt/1000;
+      p.el.style.transform=`translate(${p.lane*lw+(lw-p.w)/2}px,${p.y}px)`;
+      if(p.y+p.h>=landY){ p.alive=false; p.el.classList.add('cap-out'); setTimeout(()=>p.el.remove(),350); }
+    }
+  }
+  drawFx();
+}
+requestAnimationFrame(loop);
+
+/* ================= ПАУЗА ================= */
+function openPause(){ if(!S.running||S.overlay!=='none') return; S.paused=true; S.overlay='pause'; $('#ovlPause').classList.remove('hidden'); }
+function closePause(){ S.paused=false; S.overlay='none'; $('#ovlPause').classList.add('hidden'); }
+
+/* ================= ЗВУК UI ================= */
+function refreshSnd(){
+  const ic=S.muted?'🔇':'🔊';
+  $('#btnSnd').textContent=ic; $('#btnSndMenu').textContent=ic;
+  $('#btnSndPause').textContent='ЗВУК: '+(S.muted?'ВЫКЛ':'ВКЛ');
+}
+function toggleMute(){ S.muted=!S.muted; localStorage.setItem('cs_mute',S.muted?'1':'0'); refreshSnd(); if(!S.muted) sfx.click(); }
+
+/* ================= СОБЫТИЯ ================= */
+$('#btnStart').addEventListener('click',startGame);
+$('#btnHow').addEventListener('click',()=>{sfx.click();$('#ovlHow').classList.remove('hidden');});
+$('#btnHowClose').addEventListener('click',()=>{sfx.click();$('#ovlHow').classList.add('hidden');});
+$('#btnPause').addEventListener('click',()=>{sfx.click();openPause();});
+$('#btnResume').addEventListener('click',()=>{sfx.click();closePause();});
+$('#btnQuit').addEventListener('click',()=>{sfx.click();toMenu();});
+$('#btnGo').addEventListener('click',()=>{sfx.click();$('#ovlLevel').classList.add('hidden');S.overlay='none';spawnQuestion();});
+$('#btnRetry').addEventListener('click',()=>{sfx.click();$('#ovlOver').classList.add('hidden');resetGame();S.running=true;S.overlay='none';spawnQuestion();});
+$('#btnMenu').addEventListener('click',()=>{sfx.click();toMenu();});
+$('#btnSnd').addEventListener('click',toggleMute);
+$('#btnSndMenu').addEventListener('click',toggleMute);
+$('#btnSndPause').addEventListener('click',toggleMute);
+
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) openPause(); });
+
+addEventListener('keydown',e=>{
+  if(e.key==='m'||e.key==='ь') toggleMute();
+  if(!S.running) return;
+  if(e.key==='p'||e.key==='з'||e.key==='Escape'){ S.paused?closePause():openPause(); return; }
+  const map={'1':0,'2':1,'3':2,'4':3};
+  if(map[e.key]!=null){ const c=caps.find(k=>k.alive&&k.lane===map[e.key]); if(c) answerTap(c); }
+});
+
+/* ================= ТЕРМИНАЛ НА СТАРТЕ ================= */
+const TERM=['> загрузка модуля защиты.......... OK','> сканирование знаний: 4 сектора','> обнаружено 40 учебных целей','> готов к тренировке_'];
+let ti=0, ci=0, dir=1;
+setInterval(()=>{
+  const el=$('#term'); if(!el||document.hidden) return;
+  const line=TERM[ti];
+  ci+=dir;
+  if(ci>line.length){ dir=0; setTimeout(()=>{dir=-1;},1400); }
+  if(ci<0){ ci=0; dir=1; ti=(ti+1)%TERM.length; }
+  el.textContent='> '+line.slice(Math.max(0,ci))+(dir>=0?'█':'');
+  if(dir===0) el.textContent='> '+line;
+},55);
+
+/* ================= ИНИЦИАЛИЗАЦИЯ ================= */
+deck=shuffle(QUESTIONS.map((_,i)=>i));
+renderPips(); renderDots(); refreshSnd();
+$('#menuBest').textContent=S.best; $('#hudBest').textContent=S.best;
+})();
+</script>
+</body>
+</html>

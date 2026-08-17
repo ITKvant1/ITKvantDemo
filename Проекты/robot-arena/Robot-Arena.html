@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>РОБО·ПОЛИГОН — НТО Робототехника</title>
+<script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{fontFamily:{disp:['"Russo One"','sans-serif'],mono:['"JetBrains Mono"','monospace'],body:['Manrope','sans-serif']},colors:{line:'#1d2b47',panel:'#0b1526'}}}}</script>
+<style>
+*{user-select:none;-webkit-tap-highlight-color:transparent}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(rgba(59,130,246,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.05) 1px,transparent 1px),radial-gradient(700px 420px at 12% -5%,rgba(245,158,11,.08),transparent),radial-gradient(800px 520px at 95% 105%,rgba(34,211,238,.07),transparent);background-size:44px 44px,44px 44px,auto,auto}
+.hbtn{width:40px;height:40px;display:grid;place-items:center;border:1px solid #22334f;border-radius:8px;color:#94a3b8;background:#0d1830;transition:.15s}.hbtn:hover{color:#fbbf24;border-color:#fbbf2466;transform:translateY(-1px)}.hbtn svg{width:20px;height:20px}
+.tile{background:#0d1a30;border:1px solid #1b2a47;border-radius:5px;position:relative}
+.wall{background:repeating-linear-gradient(45deg,#243452 0 7px,#1a2740 7px 14px);border-color:#31456b;box-shadow:inset 0 0 0 2px #0a1220,inset 0 4px 10px #000a}
+.fin{background:radial-gradient(circle at 50% 50%,#0f3a2c,#0b2018);border-color:#1f7a55}
+.fin .ring{position:absolute;inset:12%;border:2px solid #34d39966;border-radius:8px;animation:ringp 1.6s ease-out infinite}
+.en{color:#fbbf24;filter:drop-shadow(0 0 7px #fbbf24aa);animation:floaty 2.2s ease-in-out infinite}
+.en.got{animation:gotpop .4s forwards}
+#robot{transition:left .3s ease,top .3s ease;z-index:10;pointer-events:none}#robot.nt{transition:none}
+.rot{transition:transform .3s ease}
+.tri{position:absolute;top:-8px;left:50%;transform:translateX(-50%);border:6px solid transparent;border-bottom:9px solid #fbbf24}
+#robot.crash{animation:shake .45s}#robot.crash .shell{border-color:#f87171;color:#fca5a5;box-shadow:0 0 20px #ef444488}
+.chip{animation:pop .18s ease;transition:.12s}.chip:hover{transform:translateY(-2px)}.chip.hl{box-shadow:0 0 0 2px #22d3ee,0 0 14px #22d3ee55;transform:translateY(-2px)}
+.hazard{background:repeating-linear-gradient(45deg,#f59e0b 0 13px,#131b2e 13px 26px)}
+.ckbtn{transition:.12s}.ckbtn:hover{filter:brightness(1.18);transform:translateY(-1px)}.ckbtn:active{transform:scale(.9)}
+body.running .pad,body.running #prog{opacity:.5;pointer-events:none}
+#toast{transition:.25s;opacity:0;transform:translate(-50%,-10px)}#toast.show{opacity:1;transform:translate(-50%,0)}
+.cur::after{content:'▮';animation:blink 1s steps(1) infinite;color:#22d3ee;margin-left:4px}
+.tick{animation:tickmv 40s linear infinite}
+.spop{animation:spop .5s backwards}
+@keyframes floaty{0%,100%{transform:translateY(-5%)}50%{transform:translateY(7%)}}
+@keyframes gotpop{40%{transform:scale(1.6)}100%{transform:scale(0);opacity:0}}
+@keyframes pop{from{transform:scale(.5);opacity:0}}
+@keyframes shake{0%,100%{margin-left:0}20%,60%{margin-left:-7px}40%,80%{margin-left:7px}}
+@keyframes ringp{from{transform:scale(.7);opacity:1}to{transform:scale(1.45);opacity:0}}
+@keyframes blink{50%{opacity:0}}
+@keyframes spop{from{transform:scale(0) rotate(-40deg)}70%{transform:scale(1.35)}}
+@keyframes tickmv{to{transform:translateX(-50%)}}
+@media(min-width:1024px){#arenaBox{width:min(100%,calc(100dvh - 255px))}}
+</style></head>
+<body class="bg-[#070d1a] text-slate-200 font-body min-h-screen lg:h-screen lg:overflow-hidden flex flex-col relative">
+<!-- ШАПКА -->
+<header class="relative z-20 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 h-16 border-b border-line bg-[#0a1222]/95 shrink-0">
+ <div class="w-10 h-10 rounded-md bg-gradient-to-b from-amber-400 to-amber-600 grid place-items-center text-slate-950 shadow-[0_0_18px_#f59e0b55]"><i data-lucide="bot" class="w-6 h-6"></i></div>
+ <div class="leading-none"><div class="font-disp text-amber-400 text-xl tracking-wide">РОБО·ПОЛИГОН</div>
+ <div class="font-mono text-[11px] tracking-[.3em] text-slate-500 mt-1 hidden sm:block">НТО // РОБОТОТЕХНИКА // 6–7 КЛАСС</div></div>
+ <div class="flex-1"></div>
+ <div class="hidden md:flex items-center gap-2.5 mr-1"><span class="font-mono text-xs tracking-[.25em] text-slate-400">УРОВЕНЬ</span>
+  <span id="lvNum" class="font-disp text-cyan-300 text-base">1/6</span><div id="segs" class="flex gap-1"></div></div>
+ <div class="flex items-center gap-1.5 border border-line rounded-lg px-3 h-10 bg-[#0d1830]"><i data-lucide="star" class="w-5 h-5 text-amber-400 fill-amber-400"></i><span id="totStars" class="font-mono text-base text-amber-300">0/18</span></div>
+ <button id="btnSnd" title="Звук вкл/выкл" class="hbtn"></button>
+ <button id="btnReset" title="Перезапуск уровня" class="hbtn"><i data-lucide="rotate-ccw"></i></button>
+ <button id="btnRestart" title="Играть заново" class="hbtn"><i data-lucide="refresh-cw"></i></button>
+</header>
+<main class="relative z-10 flex-1 flex flex-col lg:flex-row min-h-0">
+ <!-- ПОЛИГОН -->
+ <section class="flex-1 relative flex flex-col items-center justify-center p-4 min-h-0">
+  <div id="toast" class="absolute top-3 left-1/2 z-30 flex items-center gap-2 border border-cyan-400/40 bg-[#0c1a30] text-cyan-200 font-mono text-sm tracking-wider px-5 py-2.5 rounded-lg shadow-xl"></div>
+  <div id="arenaBox" class="w-full max-w-[560px]">
+   <div class="hazard rounded-2xl p-[10px] shadow-[0_25px_70px_#000c]">
+    <div id="board" class="relative grid grid-cols-7 gap-[3px] p-[3px] rounded-xl overflow-hidden bg-[#081020] border border-[#22334f]"></div>
+   </div>
+  </div>
+  <div class="mt-3 w-full max-w-[580px] flex items-center gap-2 font-mono text-sm tracking-wider">
+   <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+   <span id="status" class="cur text-cyan-300/90 truncate">СИСТЕМА ГОТОВА</span>
+   <span class="flex-1"></span><span id="lvTag" class="text-slate-500 shrink-0">УРОВЕНЬ 1/6</span>
+  </div>
+ </section>
+ <!-- ПУЛЬТ -->
+ <aside class="w-full lg:w-[600px] shrink-0 border-t lg:border-t-0 lg:border-l border-line bg-[#0a1222]/90 p-3 flex flex-col gap-3 lg:overflow-y-auto">
+  <div class="rounded-lg border border-line bg-panel p-4">
+   <div class="flex items-center justify-between gap-2">
+    <span class="flex items-center gap-1.5 font-mono text-xs tracking-[.22em] text-cyan-400/90"><i data-lucide="flag" class="w-4 h-4"></i>ЗАДАНИЕ&nbsp;<b id="tNum">1/6</b></span>
+    <span class="flex items-center gap-1 font-mono text-sm text-amber-300"><i data-lucide="zap" class="w-4 h-4"></i><span id="enCnt">0/0</span></span>
+   </div>
+   <div id="tName" class="font-disp text-2xl text-amber-300 mt-2 tracking-wide">РАЗМИНКА</div>
+   <p id="tDesc" class="text-sm text-slate-400 mt-1.5 leading-relaxed"></p>
+   <div id="tPar" class="mt-3 inline-flex items-center gap-1.5 font-mono text-xs tracking-wider text-slate-400 border border-line rounded px-2.5 py-1.5 bg-[#0d1830]"></div>
+  </div>
+  <div class="rounded-lg border border-line bg-panel p-4">
+   <div class="flex items-center justify-between">
+    <span class="flex items-center gap-1.5 font-mono text-xs tracking-[.22em] text-cyan-400/90"><i data-lucide="terminal" class="w-4 h-4"></i>ПРОГРАММА РОБОТА</span>
+    <span id="pc" class="font-mono text-sm text-slate-400">0 / 6</span>
+   </div>
+   <div id="prog" class="min-h-[86px] flex flex-wrap gap-2 mt-3 content-start"></div>
+   <div id="pEmpty" class="font-mono text-xs text-slate-600 leading-relaxed -mt-[78px] pt-1 pointer-events-none">Нажимай кнопки команд — команды появятся здесь.<br>Нажми на команду, чтобы убрать её.</div>
+  </div>
+  <div>
+   <div class="pad grid grid-cols-3 gap-2">
+    <button data-c="L" class="ckbtn border border-cyan-400/40 bg-cyan-400/10 text-cyan-300 rounded-lg py-3.5 flex flex-col items-center gap-1.5"><i data-lucide="rotate-ccw" class="w-6 h-6"></i><span class="text-[11px] font-mono tracking-wider">НАЛЕВО</span></button>
+    <button data-c="F" class="ckbtn border border-amber-400/50 bg-amber-400/15 text-amber-300 rounded-lg py-3.5 flex flex-col items-center gap-1.5"><i data-lucide="arrow-big-up" class="w-6 h-6"></i><span class="text-[11px] font-mono tracking-wider">ВПЕРЁД</span></button>
+    <button data-c="R" class="ckbtn border border-cyan-400/40 bg-cyan-400/10 text-cyan-300 rounded-lg py-3.5 flex flex-col items-center gap-1.5"><i data-lucide="rotate-cw" class="w-6 h-6"></i><span class="text-[11px] font-mono tracking-wider">НАПРАВО</span></button>
+    <button data-m="2" class="ckbtn border border-dashed border-violet-400/50 bg-violet-400/10 text-violet-300 rounded-lg py-3.5 flex flex-col items-center gap-1.5"><i data-lucide="repeat" class="w-6 h-6"></i><span class="text-[11px] font-mono tracking-wider">×2 ПОВТОР</span></button>
+    <button data-c="B" class="ckbtn border border-orange-400/50 bg-orange-400/10 text-orange-300 rounded-lg py-3.5 flex flex-col items-center gap-1.5"><i data-lucide="arrow-big-down" class="w-6 h-6"></i><span class="text-[11px] font-mono tracking-wider">НАЗАД</span></button>
+    <button data-m="3" class="ckbtn border border-dashed border-violet-400/50 bg-violet-400/10 text-violet-300 rounded-lg py-3.5 flex flex-col items-center gap-1.5"><i data-lucide="repeat" class="w-6 h-6"></i><span class="text-[11px] font-mono tracking-wider">×3 ПОВТОР</span></button>
+   </div>
+   <div class="flex gap-2 mt-3">
+    <button id="btnRun" class="ckbtn flex-1 h-14 rounded-lg bg-gradient-to-b from-amber-300 to-amber-500 text-slate-950 font-disp text-base tracking-[.2em] flex items-center justify-center gap-2 shadow-[0_4px_22px_#f59e0b44]"><i data-lucide="play" class="w-6 h-6"></i>ПУСК</button>
+    <button id="btnUndo" title="Убрать последнюю команду" class="ckbtn w-14 h-14 rounded-lg border border-line bg-[#0d1830] text-slate-300 grid place-items-center"><i data-lucide="undo-2" class="w-5 h-5"></i></button>
+    <button id="btnClear" title="Очистить программу" class="ckbtn w-14 h-14 rounded-lg border border-red-400/30 bg-red-400/5 text-red-300/90 grid place-items-center"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+   </div>
+  </div>
+  <div class="rounded-lg border border-amber-400/20 bg-amber-400/5 p-4 flex gap-3 text-sm text-amber-200/85 leading-relaxed">
+   <i data-lucide="lightbulb" class="w-5 h-5 shrink-0 mt-0.5 text-amber-300"></i>
+   <div>×2 и ×3 повторяют последнюю команду движения — программа короче, а ★★★ ближе.<br><span class="text-slate-500 font-mono text-xs">↑ ↓ ← → — команды · Enter — пуск · Backspace — отмена</span></div>
+  </div>
+ </aside>
+</main>
+<footer class="relative z-10 h-9 border-t border-line bg-[#0a1222] overflow-hidden flex items-center shrink-0">
+ <div class="tick flex whitespace-nowrap font-mono text-[11px] tracking-[.35em] text-slate-500 w-max">
+  <span class="pr-16">ТРЕНАЖЁР АЛГОРИТМОВ ДЛЯ ОЛИМПИАДЫ НТО · ПРОФИЛЬ «РОБОТОТЕХНИКА» · СОБЕРИ ПРОГРАММУ — ЗАПУСТИ РОБОТА · 6 УРОВНЕЙ · 18 ЗВЁЗД</span>
+  <span class="pr-16">ТРЕНАЖЁР АЛГОРИТМОВ ДЛЯ ОЛИМПИАДЫ НТО · ПРОФИЛЬ «РОБОТОТЕХНИКА» · СОБЕРИ ПРОГРАММУ — ЗАПУСТИ РОБОТА · 6 УРОВНЕЙ · 18 ЗВЁЗД</span>
+ </div>
+</footer>
+<!-- ПОБЕДА НА УРОВНЕ -->
+<div id="ovWin" class="hidden fixed inset-0 z-50 grid place-items-center bg-[#070d1a]/85 backdrop-blur-sm p-4">
+ <div class="w-[min(94vw,430px)] rounded-xl border border-amber-400/30 bg-panel p-8 text-center shadow-[0_0_70px_#f59e0b22]" style="animation:pop .3s ease">
+  <div class="mx-auto w-16 h-16 rounded-full bg-amber-400/15 border border-amber-400/40 grid place-items-center text-amber-300"><i data-lucide="award" class="w-8 h-8"></i></div>
+  <div class="font-disp text-3xl text-amber-300 mt-4 tracking-wide">МИССИЯ ВЫПОЛНЕНА</div>
+  <div class="font-mono text-xs tracking-[.35em] text-cyan-400/90 mt-1.5">УРОВЕНЬ ПРОЙДЕН!</div>
+  <div id="wStars" class="flex justify-center gap-2 my-5"></div>
+  <div id="wInfo" class="font-mono text-sm text-slate-400"></div>
+  <div class="flex gap-2 mt-6">
+   <button id="btnReplay" class="ckbtn flex-1 h-12 rounded-lg border border-line bg-[#0d1830] text-slate-200 font-disp text-base tracking-wider flex items-center justify-center gap-2"><i data-lucide="rotate-ccw" class="w-5 h-5"></i>ЕЩЁ РАЗ</button>
+   <button id="btnNext" class="ckbtn flex-1 h-12 rounded-lg bg-gradient-to-b from-amber-300 to-amber-500 text-slate-950 font-disp text-base tracking-wider flex items-center justify-center gap-2">ДАЛЬШЕ<i data-lucide="arrow-right" class="w-5 h-5"></i></button>
+  </div>
+ </div>
+</div>
+<!-- ФИНАЛ -->
+<div id="ovFin" class="hidden fixed inset-0 z-50 grid place-items-center bg-[#070d1a]/90 backdrop-blur-sm p-4">
+ <div class="w-[min(94vw,430px)] rounded-xl border border-amber-400/40 bg-panel p-9 text-center shadow-[0_0_90px_#f59e0b33]" style="animation:pop .3s ease">
+  <div class="mx-auto w-20 h-20 rounded-full bg-amber-400/15 border border-amber-400/50 grid place-items-center text-amber-300"><i data-lucide="trophy" class="w-10 h-10"></i></div>
+  <div class="font-disp text-3xl text-amber-300 mt-4 tracking-wide">ПОЛИГОН ПРОЙДЕН!</div>
+  <p class="text-sm text-slate-400 mt-3 leading-relaxed">Все уровни завершены.<br>Ты настоящий робототехник!</p>
+  <div class="flex items-center justify-center gap-2 my-5"><i data-lucide="star" class="w-7 h-7 text-amber-400 fill-amber-400"></i><span id="fStars" class="font-disp text-2xl text-amber-300">0 / 18</span></div>
+  <button id="btnAgain" class="ckbtn w-full h-14 rounded-lg bg-gradient-to-b from-amber-300 to-amber-500 text-slate-950 font-disp text-base tracking-widest flex items-center justify-center gap-2"><i data-lucide="refresh-cw" class="w-6 h-6"></i>ИГРАТЬ ЗАНОВО</button>
+ </div>
+</div>
+<script>
+const $=s=>document.querySelector(s),RI=()=>{try{lucide.createIcons()}catch(e){}};
+const MAXP=6,DIRS=[[-1,0],[0,1],[1,0],[0,-1]],sleep=h=>new Promise(r=>setTimeout(r,h));
+const CM={F:{ic:'arrow-big-up',t:'ВПЕРЁД'},B:{ic:'arrow-big-down',t:'НАЗАД'},L:{ic:'rotate-ccw',t:'НАЛЕВО'},R:{ic:'rotate-cw',t:'НАПРАВО'}};
+const CC={F:'border-amber-400/50 bg-amber-400/10 text-amber-300',B:'border-orange-400/50 bg-orange-400/10 text-orange-300',L:'border-cyan-400/50 bg-cyan-400/10 text-cyan-300',R:'border-cyan-400/50 bg-cyan-400/10 text-cyan-300'};
+const LV=[
+{n:'РАЗМИНКА',par:1,d:'Доедь до финиша по прямой. Собери энергию и попробуй кнопку ×3 — всего одна кнопка вместо трёх!',
+m:['.......','.......','....#..','..S**E.','. #....'.replace(' ',''),'.......','.......']},
+{n:'ПОВОРОТ',par:4,d:'Объеди препятствия, собери всю энергию и поверни к финишу. Команды НАЛЕВО и НАПРАВО поворачивают робота на месте.',
+m:['.......','.......','.....#.','.##..E.','.#....*'.slice(0,7),'.S*.*..','.......']},
+{n:'ЗИГЗАГ',par:5,d:'Три отрезка пути — три команды движения. Не забудь про повороты между ними.',
+m:['.......','.S.*...','.###*..','.#...*E','.......','.......','.......']},
+{n:'ОБВОД',par:6,d:'Проведи робота змейкой мимо блоков. Точный расчёт поворотов — залог успеха.',
+m:['.....#.','.S*....','.##.*..','E.*....','.###...','.......','.......']},
+{n:'ТОННЕЛЬ',par:4,d:'Промчись по коридору, собери всю энергию и поверни к финишу на выходе.',
+m:['......E','.......','.#####.','S*.*.*.','.#####.','.......','.......']},
+{n:'КАРМАН',par:6,d:'Энергия спрятана в кармане! Заберись туда, а команда НАЗАД вернёт робота — он едет в противоположную сторону, не разворачиваясь.',
+m:['.......','...#...','..#*#..','S*...*E','.#...#.','.......','.......']}];
+LV[0].m[4]='.#.....';LV[1].m[4]='.#...*.';
+let li=0,prog=[],busy=false,mute=false,ang=90,R={r:0,c:0},start={r:0,c:0},got=new Set(),walls=new Set(),exitC=null,totalEn=0;
+let best;try{best=JSON.parse(localStorage.getItem('rpBest'))||[0,0,0,0,0,0]}catch(e){best=[0,0,0,0,0,0]}
+/* --- звук --- */
+let AC=null;function snd(f,d=.08,t='square',v=.12){if(mute)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=t;o.frequency.value=f;g.gain.value=v;o.connect(g);g.connect(AC.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.stop(AC.currentTime+d)}catch(e){}}
+const seq=(a,t=90)=>a.forEach((f,i)=>setTimeout(()=>snd(f,.12,'triangle',.15),i*t));
+/* --- отрисовка --- */
+function renderBoard(){const L=LV[li];walls=new Set();got=new Set();totalEn=0;exitC=null;let h='';
+ L.m.forEach((row,r)=>{[...row].forEach((ch,c)=>{const k=r+','+c;
+  if(ch=='#'){walls.add(k);h+='<div class="tile wall aspect-square"></div>'}
+  else if(ch=='E'){exitC=k;h+='<div class="tile fin aspect-square flex items-center justify-center"><span class="ring"></span><i data-lucide="flag" class="w-1/2 h-1/2 text-emerald-400 relative z-10"></i></div>'}
+  else if(ch=='*'){totalEn++;h+=`<div class="tile aspect-square flex items-center justify-center"><i data-lucide="zap" id="e${r}_${c}" class="en w-[55%] h-[55%]"></i></div>`}
+  else{if(ch=='S')start={r,c};h+='<div class="tile aspect-square"></div>'}})});
+ h+=`<div id="robot" class="absolute nt" style="width:14.2857%;height:14.2857%"><div class="rot w-full h-full p-[9%]"><div class="shell relative w-full h-full rounded-lg border-2 border-amber-400 bg-[#0c1730]/95 shadow-[0_0_16px_#fbbf2455] flex items-center justify-center text-amber-300"><i data-lucide="bot" class="w-3/5 h-3/5"></i><span class="tri"></span></div></div></div>`;
+ $('#board').innerHTML=h;setRobot(true);}
+function setRobot(snap){const r=$('#robot');if(!r)return;if(snap){r.classList.add('nt');requestAnimationFrame(()=>requestAnimationFrame(()=>r.classList.remove('nt')))}
+ r.style.left=(R.c*14.2857)+'%';r.style.top=(R.r*14.2857)+'%';r.querySelector('.rot').style.transform=`rotate(${ang}deg)`;}
+function renderProg(){$('#prog').innerHTML=prog.map((p,i)=>`<button data-i="${i}" class="chip ${CC[p.c]} border rounded-md px-2.5 py-2 font-mono text-xs flex items-center gap-2"><i data-lucide="${CM[p.c].ic}" class="w-4 h-4"></i>${CM[p.c].t}${p.m>1?`<b class="text-violet-300">×${p.m}</b>`:''}</button>`).join('');
+ $('#pc').textContent=prog.length+' / 6';$('#pEmpty').style.opacity=prog.length?0:1;RI();}
+function renderHUD(){$('#lvNum').textContent=(li+1)+'/6';$('#lvTag').textContent='УРОВЕНЬ '+(li+1)+'/6';$('#tNum').textContent=(li+1)+'/6';
+ $('#tName').textContent=LV[li].n;$('#tDesc').textContent=LV[li].d;
+ $('#tPar').innerHTML=`НОРМА: ${LV[li].par} КОМАНД → <span class="text-amber-300">★★★</span>`;
+ $('#segs').innerHTML=[0,1,2,3,4,5].map(i=>`<div class="w-5 h-2 -skew-x-12 rounded-[2px] ${i<li?'bg-amber-400':i==li?'bg-cyan-400 animate-pulse':'bg-slate-700'}"></div>`).join('');
+ $('#totStars').textContent=best.reduce((a,b)=>a+b,0)+'/18';$('#enCnt').textContent=got.size+'/'+totalEn;
+ $('#btnSnd').innerHTML=`<i data-lucide="${mute?'volume-x':'volume-2'}"></i>`;RI();}
+function setStatus(t,cl='text-cyan-300/90'){const s=$('#status');s.textContent=t;s.className='cur truncate '+cl;}
+function toast(msg,ic='rocket'){$('#toast').innerHTML=`<i data-lucide="${ic}" class="w-5 h-5 text-amber-300"></i>${msg}`;RI();$('#toast').classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.remove('show'),2000);}
+/* --- команды --- */
+function addCmd(c){if(busy||prog.length>=MAXP){if(prog.length>=MAXP){toast('Программа заполнена — 6 команд максимум','triangle-alert');snd(140,.1)}return}prog.push({c,m:1});snd(760,.05);renderProg();}
+function addMult(n){if(busy)return;const p=prog[prog.length-1];
+ if(!p||!(p.c=='F'||p.c=='B')){toast('Сначала добавь команду ВПЕРЁД или НАЗАД','triangle-alert');snd(140,.12);return}
+ p.m=n;snd(980,.06);renderProg();}
+function undo(){if(busy||!prog.length)return;prog.pop();snd(300,.06);renderProg();}
+function clearAll(){if(busy||!prog.length)return;prog=[];snd(200,.1);renderProg();}
+function resetRun(){R={...start};ang=90;setRobot(true);got=new Set();
+ document.querySelectorAll('.en').forEach(e=>e.classList.remove('got'));
+ document.querySelectorAll('.chip').forEach(c=>c.classList.remove('hl'));
+ $('#enCnt').textContent='0/'+totalEn;setStatus('СИСТЕМА ГОТОВА');}
+/* --- выполнение --- */
+function hl(i){document.querySelectorAll('#prog .chip').forEach((c,k)=>c.classList.toggle('hl',k===i));}
+async function crash(){snd(90,.5,'sawtooth',.2);const r=$('#robot');r.classList.add('crash');setStatus('СТОЛКНОВЕНИЕ! РОБОТ ВЕРНУЛСЯ НА СТАРТ','text-red-400');await sleep(950);r.classList.remove('crash');resetRun();}
+async function run(){if(busy)return;if(!prog.length){toast('Добавь команды в программу','lightbulb');return}
+ busy=true;document.body.classList.add('running');snd(620,.1,'triangle');
+ const steps=[];prog.forEach((p,i)=>{for(let k=0;k<p.m;k++)steps.push({c:p.c,i})});
+ for(const s of steps){hl(s.i);
+  if(s.c=='L'||s.c=='R'){ang+=s.c=='R'?90:-90;setRobot();snd(440,.07,'triangle');await sleep(320);continue}
+  const d=(((ang%360)+360)%360)/90,v=DIRS[s.c=='B'?(d+2)%4:d],nr=R.r+v[0],nc=R.c+v[1];
+  if(walls.has(nr+','+nc)||nr<0||nr>6||nc<0||nc>6){await crash();busy=false;document.body.classList.remove('running');hl(-1);return}
+  R={r:nr,c:nc};setRobot();snd(220,.06);await sleep(330);
+  const en=document.getElementById('e'+nr+'_'+nc);
+  if(en&&!en.classList.contains('got')){en.classList.add('got');got.add(nr+','+nc);$('#enCnt').textContent=got.size+'/'+totalEn;seq([880,1320],60);}}
+ hl(-1);busy=false;document.body.classList.remove('running');
+ if(exitC==R.r+','+R.c&&got.size==totalEn){win()}
+ else if(exitC==R.r+','+R.c){setStatus('СОБРАНА НЕ ВСЯ ЭНЕРГИЯ! ОСТАЛОСЬ: '+(totalEn-got.size),'text-amber-300');snd(180,.2)}
+ else{setStatus('ФИНИШ НЕ ДОСТИГНУТ. ПОПРОБУЙ ЕЩЁ','text-amber-300');snd(180,.2)}}
+function win(){const par=LV[li].par,st=prog.length<=par?3:prog.length<=par+2?2:1;
+ best[li]=Math.max(best[li],st);try{localStorage.setItem('rpBest',JSON.stringify(best))}catch(e){}
+ seq([523,659,784,1046],110);renderHUD();
+ $('#wStars').innerHTML=[1,2,3].map(i=>`<i data-lucide="star" style="animation-delay:${.15+i*.14}s" class="w-12 h-12 ${i<=st?'spop text-amber-400 fill-amber-400':'text-slate-700'}"></i>`).join('');
+ $('#wInfo').innerHTML=`КОМАНД: <b class="text-slate-200">${prog.length}</b> · НОРМА: <b class="text-slate-200">${par}</b>`;
+ $('#btnNext').innerHTML=li<5?'ДАЛЬШЕ<i data-lucide="arrow-right" class="w-5 h-5"></i>':'ИТОГИ<i data-lucide="trophy" class="w-5 h-5"></i>';
+ $('#ovWin').classList.remove('hidden');RI();}
+/* --- уровни --- */
+function loadLevel(i){li=i;prog=[];renderBoard();renderProg();renderHUD();resetRun();RI();toast('ЗАДАНИЕ '+(i+1)+'/6 · '+LV[i].n,'rocket');}
+function restartGame(){best=[0,0,0,0,0,0];try{localStorage.removeItem('rpBest')}catch(e){}
+ $('#ovFin').classList.add('hidden');$('#ovWin').classList.add('hidden');loadLevel(0);toast('ПРОГРЕСС СБРОШЕН. ПОЕХАЛИ!','rocket');}
+/* --- события --- */
+document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>addCmd(b.dataset.c));
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>addMult(+b.dataset.m));
+$('#btnRun').onclick=run;$('#btnUndo').onclick=undo;$('#btnClear').onclick=clearAll;
+$('#prog').onclick=e=>{const b=e.target.closest('[data-i]');if(b&&!busy){prog.splice(+b.dataset.i,1);snd(300,.06);renderProg();}};
+$('#btnReset').onclick=()=>{if(!busy){resetRun();toast('УРОВЕНЬ ПЕРЕЗАПУЩЕН','rotate-ccw')}};
+$('#btnRestart').onclick=()=>{if(!busy)restartGame()};
+$('#btnSnd').onclick=()=>{mute=!mute;renderHUD();if(!mute)snd(880,.07)};
+$('#btnReplay').onclick=()=>{$('#ovWin').classList.add('hidden');resetRun();setStatus('СИСТЕМА ГОТОВА. УЛУЧШИ ПРОГРАММУ');};
+$('#btnNext').onclick=()=>{$('#ovWin').classList.add('hidden');
+ if(li<5)loadLevel(li+1);else{$('#fStars').textContent=best.reduce((a,b)=>a+b,0)+' / 18';$('#ovFin').classList.remove('hidden');RI();seq([523,659,784,880,1046,1318],120);}};
+$('#btnAgain').onclick=restartGame;
+document.addEventListener('keydown',e=>{if(busy||!$('#ovWin').classList.contains('hidden')||!$('#ovFin').classList.contains('hidden'))return;
+ const k=e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Backspace','Enter'].includes(k))e.preventDefault();
+ if(k=='ArrowUp')addCmd('F');else if(k=='ArrowDown')addCmd('B');else if(k=='ArrowLeft')addCmd('L');else if(k=='ArrowRight')addCmd('R');
+ else if(k=='Enter')run();else if(k=='Backspace')undo();});
+loadLevel(0);
+</script></body></html>

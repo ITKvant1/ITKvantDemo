@@ -283,7 +283,7 @@ tailwind.config = {
 </div>
 
 <!-- ═══════════ 01 · МАРШРУТ ═══════════ -->
-<section id="route" class="scroll-mt-24 py-24 sm:py-28">
+<section id="route" class=" scroll-mt--24 py-24 sm:py-28">
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
     <div class="rv flex flex-wrap items-end justify-between gap-6 mb-12 sm:mb-16">
       <div>
@@ -347,7 +347,7 @@ tailwind.config = {
 </section>
 
 <!-- ═══════════ 02 · ГРАФ СВЯЗЕЙ ═══════════ -->
-<section id="graph" class="scroll-mt-24 py-24 sm:py-28 border-t border-white/5 bg-deep/60">
+<section id="graph" class=" scroll-mt--24 py-24 sm:py-28 border-t border-white/5 bg-deep/60">
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
     <div class="rv flex flex-wrap items-end justify-between gap-6 mb-12">
       <div>
@@ -419,7 +419,7 @@ tailwind.config = {
 </section>
 
 <!-- ═══════════ 03 · ВИТРИНА ПРОЕКТОВ ═══════════ -->
-<section id="projects" class="scroll-mt-24 py-20 sm:py-24 border-t border-white/5">
+<section id="projects" class=" scroll-mt--24 py-20 sm:py-24 border-t border-white/5">
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
     
     <!-- Заголовок секции -->
@@ -439,8 +439,7 @@ tailwind.config = {
             <span class="font-mono text-[10px] text-slate-500 group-hover:text-lime-300 transition-colors">01</span>
             <span class="pdot w-1.5 h-1.5 rounded-full bg-slate-700 group-[.is-on]:bg-lime-400 transition-colors"></span>
           </span>
-          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">WEB</span>
-          <!-- Индикатор активности -->
+          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">КИБЕР-ЩИТ</span>
           <span class="absolute bottom-0 left-2 right-2 h-[2px] bg-lime-400 scale-x-0 group-[.is-on]:scale-x-100 transition-transform duration-300"></span>
         </button>
 
@@ -449,7 +448,7 @@ tailwind.config = {
             <span class="font-mono text-[10px] text-slate-500 group-hover:text-lime-300 transition-colors">02</span>
             <span class="pdot w-1.5 h-1.5 rounded-full bg-slate-700 group-[.is-on]:bg-lime-400 transition-colors"></span>
           </span>
-          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">GAMEDEV</span>
+          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">КОСМО-МАТЕМАТИКА</span>
           <span class="absolute bottom-0 left-2 right-2 h-[2px] bg-lime-400 scale-x-0 group-[.is-on]:scale-x-100 transition-transform duration-300"></span>
         </button>
 
@@ -458,7 +457,7 @@ tailwind.config = {
             <span class="font-mono text-[10px] text-slate-500 group-hover:text-lime-300 transition-colors">03</span>
             <span class="pdot w-1.5 h-1.5 rounded-full bg-slate-700 group-[.is-on]:bg-lime-400 transition-colors"></span>
           </span>
-          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">GODOT</span>
+          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">РОБО-ПОЛИГОН</span>
           <span class="absolute bottom-0 left-2 right-2 h-[2px] bg-lime-400 scale-x-0 group-[.is-on]:scale-x-100 transition-transform duration-300"></span>
         </button>
 
@@ -467,7 +466,7 @@ tailwind.config = {
             <span class="font-mono text-[10px] text-slate-500 group-hover:text-lime-300 transition-colors">04</span>
             <span class="pdot w-1.5 h-1.5 rounded-full bg-slate-700 group-[.is-on]:bg-lime-400 transition-colors"></span>
           </span>
-          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">КОМАНДА</span>
+          <span class="block font-display font-600 text-white text-sm sm:text-base leading-tight">ФИЗИКА</span>
           <span class="absolute bottom-0 left-2 right-2 h-[2px] bg-lime-400 scale-x-0 group-[.is-on]:scale-x-100 transition-transform duration-300"></span>
         </button>
 
@@ -477,7 +476,7 @@ tailwind.config = {
     <!-- Контентная область -->
     <div class="rv min-h-[400px]">
 
-      <!-- ═══ SLOT-1 : SCRATCH ═══ -->
+      <!-- ═══ cyber-shield ═══ -->
       <div id="p1" class="ppanel flex flex-col lg:flex-row gap-6 lg:gap-10">
         <!-- Описание (без изменений) -->
         <div class="lg:w-72 shrink-0 corner relative border border-dashed border-white/20 rounded-lg p-5 h-fit">
@@ -503,7 +502,138 @@ tailwind.config = {
             title="Открыть во весь экран"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-            <span>Full</span>
+          </button>
+
+          <!-- Viewport контейнер -->
+          <div class="card-viewport absolute inset-0 overflow-hidden">
+            <!-- Wrapper: перемещаем именно его, а не сам iframe -->
+            <div class="iframe-wrapper origin-top-left pointer-events-none preview-mode">
+              <iframe 
+                src="./Проекты/cyber-shield/Cyber-Shield.html" 
+                class="w-full h-full border-0 pointer-events-auto block" 
+                title="Физический проект"
+                loading="lazy" 
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ space_calc ═══ -->
+      <div id="p2" class="ppanel flex flex-col lg:flex-row gap-6 lg:gap-10">
+        <!-- Описание (без изменений) -->
+        <div class="lg:w-72 shrink-0 corner relative border border-dashed border-white/20 rounded-lg p-5 h-fit">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          <p class="font-mono text-[10px] tracking-[.25em] text-cyan-300">// ОПИСАНИЕ</p>
+          <h3 class="font-display font-600 text-white text-lg mt-2 leading-tight">Название проекта №1</h3>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed">Краткое описание идеи, задачи и результата работы ученика.</p>
+          <div class="mt-5 pt-3 border-t border-white/10 font-mono text-[11px] text-slate-500 space-y-4">
+              <p class="flex justify-between"><span>Автор → Имя</span></p>
+              <p class="flex justify-between"><span>Модуль → WEB</span></p>
+          </div>
+        </div>
+
+        <!-- Проект (Обновленный блок) -->
+                <!-- Проект -->
+        <div class="project-card flex-1 corner relative border border-dashed border-white/20 rounded-lg min-h-[300px] lg:min-h-[420px] bg-panel/40 overflow-hidden">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          
+          <!-- Кнопка -->
+          <button 
+            onclick="openProjectFullscreen(this)"
+            class="absolute top-3 right-3 z-20 p-2 bg-black/60 backdrop-blur border border-white/20 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all rounded font-mono text-xs uppercase tracking-wider flex items-center gap-2"
+            title="Открыть во весь экран"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+          </button>
+
+          <!-- Viewport контейнер -->
+          <div class="card-viewport absolute inset-0 overflow-hidden">
+            <!-- Wrapper: перемещаем именно его, а не сам iframe -->
+            <div class="iframe-wrapper origin-top-left pointer-events-none preview-mode">
+              <iframe 
+                src="./Проекты/space_calc/index.html" 
+                class="w-full h-full border-0 pointer-events-auto block" 
+                title="Физический проект"
+                loading="lazy" 
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ robot-arena ═══ -->
+      <div id="p3" class="ppanel flex flex-col lg:flex-row gap-6 lg:gap-10">
+        <!-- Описание (без изменений) -->
+        <div class="lg:w-72 shrink-0 corner relative border border-dashed border-white/20 rounded-lg p-5 h-fit">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          <p class="font-mono text-[10px] tracking-[.25em] text-cyan-300">// ОПИСАНИЕ</p>
+          <h3 class="font-display font-600 text-white text-lg mt-2 leading-tight">Название проекта №1</h3>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed">Краткое описание идеи, задачи и результата работы ученика.</p>
+          <div class="mt-5 pt-3 border-t border-white/10 font-mono text-[11px] text-slate-500 space-y-4">
+              <p class="flex justify-between"><span>Автор → Имя</span></p>
+              <p class="flex justify-between"><span>Модуль → WEB</span></p>
+          </div>
+        </div>
+
+        <!-- Проект (Обновленный блок) -->
+                <!-- Проект -->
+        <div class="project-card flex-1 corner relative border border-dashed border-white/20 rounded-lg min-h-[300px] lg:min-h-[420px] bg-panel/40 overflow-hidden">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          
+          <!-- Кнопка -->
+          <button 
+            onclick="openProjectFullscreen(this)"
+            class="absolute top-3 right-3 z-20 p-2 bg-black/60 backdrop-blur border border-white/20 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all rounded font-mono text-xs uppercase tracking-wider flex items-center gap-2"
+            title="Открыть во весь экран"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+          </button>
+
+          <!-- Viewport контейнер -->
+          <div class="card-viewport absolute inset-0 overflow-hidden">
+            <!-- Wrapper: перемещаем именно его, а не сам iframe -->
+            <div class="iframe-wrapper origin-top-left pointer-events-none preview-mode">
+              <iframe 
+                src="./Проекты/robot-arena/Robot-Arena.html" 
+                class="w-full h-full border-0 pointer-events-auto block" 
+                title="Физический проект"
+                loading="lazy" 
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ physics ═══ -->
+      <div id="p4" class="ppanel flex flex-col lg:flex-row gap-6 lg:gap-10">
+        <!-- Описание (без изменений) -->
+        <div class="lg:w-72 shrink-0 corner relative border border-dashed border-white/20 rounded-lg p-5 h-fit">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          <p class="font-mono text-[10px] tracking-[.25em] text-cyan-300">// ОПИСАНИЕ</p>
+          <h3 class="font-display font-600 text-white text-lg mt-2 leading-tight">Название проекта №1</h3>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed">Краткое описание идеи, задачи и результата работы ученика.</p>
+          <div class="mt-5 pt-3 border-t border-white/10 font-mono text-[11px] text-slate-500 space-y-4">
+              <p class="flex justify-between"><span>Автор → Имя</span></p>
+              <p class="flex justify-between"><span>Модуль → WEB</span></p>
+          </div>
+        </div>
+
+        <!-- Проект (Обновленный блок) -->
+                <!-- Проект -->
+        <div class="project-card flex-1 corner relative border border-dashed border-white/20 rounded-lg min-h-[300px] lg:min-h-[420px] bg-panel/40 overflow-hidden">
+          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
+          
+          <!-- Кнопка -->
+          <button 
+            onclick="openProjectFullscreen(this)"
+            class="absolute top-3 right-3 z-20 p-2 bg-black/60 backdrop-blur border border-white/20 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all rounded font-mono text-xs uppercase tracking-wider flex items-center gap-2"
+            title="Открыть во весь экран"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
           </button>
 
           <!-- Viewport контейнер -->
@@ -522,52 +652,13 @@ tailwind.config = {
         </div>
       </div>
 
-      <!-- ═══ SLOT-2 : PYTHON ═══ -->
-      <div id="p2" class="ppanel hidden flex flex-col lg:flex-row gap-6 lg:gap-10">
-        <div class="lg:w-72 shrink-0 corner relative border border-dashed border-white/20 rounded-lg p-5 h-fit">
-          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
-          <p class="font-mono text-[10px] tracking-[.25em] text-lime-300">// ОПИСАНИЕ</p>
-          <h3 class="font-display font-600 text-white text-lg mt-2 leading-tight">Название проекта №2</h3>
-          <p class="text-sm text-slate-400 mt-3 leading-relaxed">Скрипт, бот или анализ данных. Описание функционала.</p>
-          <div class="mt-5 pt-3 border-t border-white/10 font-mono text-[11px] text-slate-500 space-y-4">
-            <p class="flex justify-between"><span>Автор → Имя</span></p>
-            <p class="flex justify-between"><span>Модуль → HTML / JS</span></p>
-          </div>
-        </div>
-        
-        <!-- Проект (Обновленный блок) -->
-        <div class="flex-1 corner relative border border-dashed border-white/20 rounded-lg min-h-[300px] lg:min-h-[420px] bg-panel/40 overflow-hidden">
-          <span class="-top-2 -left-1">+</span><span class="-top-2 -right-1">+</span><span class="-bottom-2 -left-1">+</span><span class="-bottom-2 -right-1">+</span>
-          
-          <!-- Кнопка разворота -->
-          <button 
-            onclick="openProjectFullscreen(this)"
-            class="absolute top-3 right-3 z-20 p-2 bg-black/60 backdrop-blur border border-white/20 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all rounded font-mono text-xs uppercase tracking-wider flex items-center gap-2"
-            title="Открыть во весь экран"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-          </button>
-
-          <!-- Iframe -->
-          <iframe 
-            src="./Проекты/space_calc/index.html" 
-            class="w-full h-full absolute inset-0 border-0" 
-            title="Физический проект"
-            style="width: 200%; height: 200%; transform: scale(0.50); transform-origin: top left;" 
-            loading="lazy" 
-            sandbox="allow-scripts allow-same-origin allow-popups allow-forms">
-          </iframe>
-        </div>
-
-      </div>
-
     </div>
   </div>
 </section>
 
 
 <!-- ═══════════ 04 · СВЯЗЬ СО ШКОЛОЙ ═══════════ -->
-<section id="school" class="scroll-mt-24 py-24 sm:py-28 border-t border-white/5 bg-deep/60">
+<section id="school" class=" scroll-mt--24 py-24 sm:py-28 border-t border-white/5 bg-deep/60">
   <div class="mx-auto max-w-7xl px-5 sm:px-8 grid lg:grid-cols-12 gap-12">
 
     <div class="lg:col-span-5">
@@ -630,19 +721,24 @@ tailwind.config = {
 </section>
 
 <!-- ═══════════ 05 · ИННОВАЦИИ ═══════════ -->
-<section id="innovation" class="scroll-mt-24 py-24 sm:py-28 border-t border-white/5">
+<section id="innovation" class=" scroll-mt--24 py-24 sm:py-28 border-t border-white/5">
   <div class="mx-auto max-w-7xl px-5 sm:px-8 grid lg:grid-cols-12 gap-12">
 
     <!-- фото-блок -->
     <div class="lg:col-span-5 lg:order-2">
-      <div class="lg:sticky lg:top-24 relative">
-        <div class="rv kb overflow-hidden rounded-xl border border-white/10 aspect-[4/5]">
-          <img src="https://picsum.photos/seed/quantorium-it-lab/640/800" alt="Занятие в IT-лаборатории" class="w-full h-full object-cover">
+      <div class="lg:sticky lg:top-24 relative group">
+        
+        <!-- ОСНОВНОЕ ФОТО (С эффектом Crossfade) -->
+        <div class="rv kb overflow-hidden rounded-xl border border-white/10 aspect-[1/1] bg-gray-900 relative">
+          <!-- Контейнер для слайдов -->
+          <div id="main-slider" class="w-full h-full relative">
+            <!-- Сюда JS будет добавлять картинки -->
+          </div>
+          
         </div>
-        <div class="rv kb absolute -bottom-10 -left-6 w-44 sm:w-52 rounded-lg overflow-hidden border border-white/15 shadow-2xl rotate-[-3deg]" style="--rd:200ms">
-          <img src="https://picsum.photos/seed/kids-hackathon-team/480/340" alt="Командная работа на хакатоне" class="w-full h-full object-cover">
-        </div>
-        <div class="rv floaty absolute -top-5 right-4 bg-panel border border-lime-300/50 rounded-full px-4 py-2 font-mono text-[11px] text-lime-300" style="--rd:300ms; --r:2deg">release v2.0 ✓</div>
+        
+        <!-- Бейдж версии (оставил как есть) -->
+        <div class="rv floaty absolute -top-5 right-4 bg-panel border border-lime-300/50 rounded-full px-4 py-2 font-mono text-[11px] text-lime-300 z-20" style="--rd:300ms; --r:2deg">release v2.0 ✓</div>
       </div>
     </div>
 
@@ -682,7 +778,7 @@ tailwind.config = {
 </section>
 
 <!-- ═══════════ ФУТЕР / КОНТАКТЫ ═══════════ -->
-<footer id="contacts" class="scroll-mt-24 border-t border-white/10 bg-deep pt-16 pb-8">
+<footer id="contacts" class=" scroll-mt--24 border-t border-white/10 bg-deep pt-16 pb-8">
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
     <div class="grid md:grid-cols-12 gap-10">
       <div class="md:col-span-4">
@@ -706,13 +802,6 @@ tailwind.config = {
       </div>
 
       <div class="md:col-span-3">
-        <p class="font-mono text-[10px] tracking-[.25em] text-slate-500 mb-4">ПРОГРАММЫ</p>
-        <ul class="space-y-2.5 text-sm text-slate-400">
-          <li class="flex gap-2"><span class="text-cyan-300">▸</span>Вводный курс · год 1 <span class="text-slate-600 font-mono text-xs">(Scratch / Python / Godot)</span></li>
-          <li class="flex gap-2"><span class="text-lime-300">▸</span>Проектная деятельность · год 2</li>
-          <li class="flex gap-2"><span class="text-amber-300">▸</span>Конкурсное сопровождение</li>
-          <li class="flex gap-2"><span class="text-violet-300">▸</span>Практико-ориентированные интенсивы</li>
-        </ul>
       </div>
 
       <div class="md:col-span-3">
@@ -1039,11 +1128,11 @@ const $$ = s => [...document.querySelectorAll(s)];
       btn.style.color       = '#fff';
       wrap.style.zIndex     = '30';
     } else if(isConnected){
-      btn.style.borderColor = `${cat.c}88`;
-      btn.style.color       = '#e2e8f0';
-      // opacity остаётся '' (по умолчанию 1) — это важно!
+      btn.style.borderColor = `${cat.c}aa`;
+      btn.style.color       = '#f1f5f9';
+      btn.style.opacity     = '1';              // Соседи тоже остаются яркими
     } else {
-      btn.style.opacity = '0.25';
+      btn.style.opacity = '0.60';
     }
   });
 
@@ -1285,6 +1374,96 @@ document.addEventListener('keydown', (e) => {
     closeProjectFullscreen();
   }
 });
+
+// Фото секция
+const photos = [
+  { 
+    main: './images/1.jpg',
+  },
+  { 
+    main: './images/2.jpg', 
+  },
+  { 
+    main: './images/3.jpg', 
+  },
+  { 
+    main: './images/4.jpg', 
+  },
+  { 
+    main: './images/5.jpg', 
+  },
+  { 
+    main: './images/6.jpg', 
+  }
+];
+
+let currentIndex = 0;
+const sliderContainer = document.getElementById('main-slider');
+const secondaryImg = document.getElementById('secondary-img');
+const INTERVAL_TIME = 10000; // Смена каждые 5 секунд
+let autoPlayTimer;
+
+// 2. Инициализация слайдера
+function initSlider() {
+  sliderContainer.innerHTML = '';
+  photos.forEach((photo, index) => {
+    const img = document.createElement('img');
+    img.src = photo.main;
+    img.alt = `Фото ${index + 1}`;
+    // Tailwind классы для абсолютного позиционирования и эффекта fade
+    img.className = `absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out ${
+      index === 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+    }`;
+    img.dataset.index = index;
+    sliderContainer.appendChild(img);
+  });
+  startAutoPlay();
+}
+
+// 3. Функция смены слайда
+function goToSlide(index) {
+  const slides = sliderContainer.querySelectorAll('img');
+  
+  // Убираем активный класс у всех
+  slides.forEach(slide => {
+    slide.classList.remove('opacity-100', 'scale-100');
+    slide.classList.add('opacity-0', 'scale-105');
+  });
+
+  // Добавляем активный класс текущему
+  slides[index].classList.remove('opacity-0', 'scale-105');
+  slides[index].classList.add('opacity-100', 'scale-100');
+
+  currentIndex = index;
+}
+
+function nextSlide() {
+  const nextIndex = (currentIndex + 1) % photos.length;
+  goToSlide(nextIndex);
+  resetAutoPlay();
+}
+
+function prevSlide() {
+  const prevIndex = (currentIndex - 1 + photos.length) % photos.length;
+  goToSlide(prevIndex);
+  resetAutoPlay();
+}
+
+// 4. Автоплей
+function startAutoPlay() {
+  autoPlayTimer = setInterval(() => {
+    const nextIndex = (currentIndex + 1) % photos.length;
+    goToSlide(nextIndex);
+  }, INTERVAL_TIME);
+}
+
+function resetAutoPlay() {
+  clearInterval(autoPlayTimer);
+  startAutoPlay();
+}
+
+// Запуск при загрузке
+document.addEventListener('DOMContentLoaded', initSlider);
 </script>
 </body>
 </html>
